@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Controler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.controler</a> &gt; <span class="el_source">Controler.java</span></div><h1>Controler.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.controler;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.model.FieldModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.observer.KeyEventSubscription;
+import fr.univ_lyon1.info.m1.poneymon_fx.view.JfxView;
+import javafx.animation.AnimationTimer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Class controler.
+ * @author jeremy
+ */
+public class Controler extends KeyEventSubscription {
+    /**
+     * Liste des vues géré par le controleur.
+     */
+    private final List&lt;JfxView&gt; views;
+    /**
+     * Liste que le controleur doit mettre à jour (les autres sont des
+     * observers et se mettent à jour toutes seules).
+     */
+    private final List&lt;JfxView&gt; updateViews;
+    /**
+     * Modèle des données à gérer.
+     */
+    private FieldModel model;
+
+    private AnimationTimer timer;
+
+    private static Controler instance;
+<span class="nc" id="L33">    private boolean paused = false;</span>
+
+<span class="nc" id="L35">    private Controler() {</span>
+<span class="nc" id="L36">        this.views = new ArrayList&lt;JfxView&gt;();</span>
+<span class="nc" id="L37">        this.updateViews = new ArrayList&lt;JfxView&gt;();</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * Renvoie une instance unique de ce contrôleur.
+     *
+     * @return Instance unique du contrôleur
+     */
+    public static Controler getControler() {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (Controler.instance == null) {</span>
+<span class="nc" id="L47">            Controler.instance = new Controler();</span>
+        }
+<span class="nc" id="L49">        return Controler.instance;</span>
+    }
+
+    public void addView(JfxView v) {
+<span class="nc" id="L53">        this.views.add(v);</span>
+<span class="nc" id="L54">    }</span>
+
+    public void addUpdateView(JfxView v) {
+<span class="nc" id="L57">        this.updateViews.add(v);</span>
+<span class="nc" id="L58">        this.views.add(v);</span>
+<span class="nc" id="L59">    }</span>
+
+    /**
+     * Lance la boucle principale du jeu.
+     */
+    public void startTimer() {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (timer != null) {</span>
+<span class="nc" id="L66">            return;</span>
+        }
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        for (JfxView view : views) {</span>
+<span class="nc" id="L69">            view.show();</span>
+<span class="nc" id="L70">            view.display();</span>
+<span class="nc" id="L71">        }</span>
+<span class="nc" id="L72">        timer = new AnimationTimer() {</span>
+            public void handle(long currentNanoTime) {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                if (model.update()) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                    for (JfxView view : updateViews) {</span>
+<span class="nc" id="L76">                        view.display();</span>
+<span class="nc" id="L77">                    }</span>
+                }
+<span class="nc" id="L79">            }</span>
+        };
+<span class="nc" id="L81">        timer.start(); // On lance la boucle de rafraichissement</span>
+<span class="nc" id="L82">    }</span>
+
+    public void setModel(FieldModel m) {
+<span class="nc" id="L85">        this.model = m;</span>
+<span class="nc" id="L86">    }</span>
+
+    /**
+     * Mets en pause le jeu ou le relance si il était déjà en pause.
+     */
+    public void togglePause() {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (this.paused) {</span>
+<span class="nc" id="L93">            this.timer.start();</span>
+        } else {
+<span class="nc" id="L95">            this.timer.stop();</span>
+        }
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        this.paused = !this.paused;</span>
+<span class="nc" id="L98">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,109 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMulti,100,0,0,0,22,0,1,0,1,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,CharacterView,230,0,22,0,48,0,19,0,8,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,SpinnerCharacter,56,0,0,0,16,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,JfxView,49,0,0,0,15,0,4,0,4,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MapObjectView,116,0,16,0,25,0,13,0,5,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,ScoreView,266,0,4,0,43,0,5,0,3,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MapView,202,0,18,0,39,0,15,0,6,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,ScoreView.new EventHandler() {...},13,0,0,0,3,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,FieldView.new EventHandler() {...},14,0,0,0,3,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,ScoreView.new EventHandler() {...},13,0,0,0,3,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,ScoreView.new EventHandler() {...},9,0,0,0,3,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,BoostKey,84,0,0,0,11,0,6,0,6,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuPrincipalView.new EventHandler() {...},13,0,0,0,3,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuPrincipalView.new EventHandler() {...},7,0,0,0,2,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,CanvasView,11,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuPrincipalView.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuPrincipalView.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,FieldView,256,0,10,0,34,0,9,0,4,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,JumpKey,84,0,0,0,11,0,6,0,6,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuLocal,482,0,4,0,98,0,14,0,12,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuItem.MiniPoney,20,0,0,0,2,0,1,0,1,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiClient.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiClient.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuLocal.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuLocal.new EventHandler() {...},10,0,0,0,3,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiClient,229,0,0,0,55,0,11,0,11,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuPrincipalView,231,0,0,0,53,0,3,0,3,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiHost.new EventHandler() {...},23,0,0,0,5,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiHost,363,0,0,0,79,0,12,0,12,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiHost.new EventHandler() {...},10,0,0,0,3,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMulti.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,SpinnerCharacter.new SpinnerValueFactory() {...},71,0,0,0,13,0,3,0,3,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiHost.new EventHandler() {...},24,0,0,0,5,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiHost.Player,13,0,0,0,6,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMultiHost.new TimerTask() {...},38,0,0,0,6,0,3,0,3,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMulti.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuMulti.new EventHandler() {...},17,0,0,0,4,0,2,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.view,MenuItem,86,0,4,0,18,0,7,0,5,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur,InterpreteurMap,0,19,2,4,0,4,2,3,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur,InterpreteurJmpPwr,4,27,6,4,0,8,5,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur,InterpreteurUpdateModel,21,3,6,0,4,1,4,1,1,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur,InterpreteurConnect,0,24,2,4,0,5,2,3,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur,InterpreteurReady,0,30,1,5,0,6,1,4,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur,InterpreteurBeginning,21,3,6,0,4,1,4,1,1,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,PreciseWaterphilOptimizedAiStrategy,13,33,6,8,4,8,4,5,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,NoJumpOptimizedAiStrategy,2,22,1,3,1,5,1,3,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,SimpleAiStrategy,2,43,1,11,1,10,1,7,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,SemiDumbAiStrategy,0,24,1,7,0,8,1,5,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,OptimizedSimpleAiStrategy,7,43,5,9,1,10,4,5,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,DumbAiStrategy,0,6,0,0,0,3,0,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,AiFactory,0,94,0,2,0,19,0,4,0,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,WaterphilOptimizedAiStrategy,16,33,6,8,4,8,4,5,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,PreciseJumpOptimizedAiStrategy,2,40,2,10,1,10,2,6,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.ai,LogicAiStrategy,13,43,5,11,2,10,3,7,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.objectEffects,BoostEffect,3,4,0,0,1,2,1,1,1,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.objectEffects,AquaSlowDownEffect,0,7,0,0,0,3,0,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.objectEffects,EffectStatusEnum,8,71,0,0,1,9,2,3,2,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.objectEffects,StunEffect,0,7,0,0,0,3,0,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx,App,93,0,0,0,25,0,3,0,3,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.host,HostConnect,111,92,19,3,30,25,12,4,2,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.host,HostThread,66,119,0,6,20,31,0,5,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.host,Host,8,30,0,0,3,9,2,3,2,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info,Ready,0,15,0,0,0,6,0,3,0,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info,JmpPwr,0,21,0,0,0,8,0,4,0,4
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info,FieldInfo,51,0,2,0,12,0,6,0,5,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info,Connect,0,15,0,0,0,6,0,3,0,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info,MapInfo,0,9,0,0,0,4,0,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info,Beginning,6,9,0,0,2,4,2,1,2,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info,UpdateModel,6,9,0,0,2,4,2,1,2,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.controler,Controler.new AnimationTimer() {...},27,0,4,0,6,0,4,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.controler,Controler,94,0,10,0,29,0,12,0,7,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau,Reception,11,48,0,0,3,15,0,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau,Interface,48,118,4,4,14,40,9,17,5,17
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau,Envoi,6,51,2,2,4,16,2,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,WeakSlowDown,0,6,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,BigStun,0,6,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,WeakStun,0,6,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,Boost,9,32,1,3,2,9,1,3,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,ImmunityToStun,9,30,2,2,2,9,2,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,BigSlowDown,0,6,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,SlowDown,0,11,0,0,0,3,0,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,NormalWeakBoost,0,9,0,0,0,4,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,NormalBigBoost,0,9,0,0,0,4,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,Stun,17,31,2,2,4,10,2,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement,BasicImmunToStun,0,6,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.observer,UpdateObservable,14,16,1,1,4,4,2,2,1,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.observer,KeyEventSubscription,30,0,2,0,8,0,4,0,3,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,ObjectObstacle,0,8,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,GhostPoneyModel,25,39,1,1,7,9,4,3,3,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,LamaModel,21,59,1,1,5,13,3,4,2,4
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,ObjectPuddle,0,8,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,CharacterModel,70,350,13,27,23,93,17,44,9,32
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,mapCreator,705,0,8,0,89,0,6,0,2,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,FieldModel,115,336,17,23,23,55,13,19,3,9
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,Map,39,317,4,36,14,74,4,29,0,13
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,MapObject,0,6,0,0,0,3,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,ColorEnum,8,71,0,0,1,9,2,3,2,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,ObjectBooster,8,0,0,0,3,0,1,0,1,0
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,ModeEnum,9,39,0,0,0,4,2,2,2,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,PoneyModel,8,69,0,2,2,15,1,6,1,5
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model,AquaPoneyModel,26,43,1,1,7,9,4,3,3,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.customer,Customer,20,48,0,0,8,14,4,5,4,5
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.reseau.customer,CustomerConnect,72,136,0,4,23,33,0,4,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.jump,LongerJump,24,10,6,1,6,3,4,2,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.jump,LongerJump.new Object() {...},3,23,0,0,0,1,0,1,0,1
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.jump,NormalJump,0,34,0,7,0,9,0,6,0,2
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.jump,JumpState,13,49,0,0,2,7,3,3,3,3
+poneymon_fx,fr.univ_lyon1.info.m1.poneymon_fx.model.jump,NormalJump.new Object() {...},3,23,0,0,0,1,0,1,0,1

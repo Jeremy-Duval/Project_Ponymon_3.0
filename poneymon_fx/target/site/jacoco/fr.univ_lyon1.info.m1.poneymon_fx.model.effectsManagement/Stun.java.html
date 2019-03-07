@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Stun.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement</a> &gt; <span class="el_source">Stun.java</span></div><h1>Stun.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.model.CharacterModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.objectEffects.EffectStatusEnum;
+
+/**
+ *  Classe mère des effets d'étourdissement.
+ * @author jeremy
+ */
+public abstract class Stun implements EffectsManagement {
+    private long startTime;
+    /**
+     * Temps (en milliseconde) durant lequel l'effet dure.
+     */
+    protected long duration;
+    
+<span class="fc" id="L17">    public Stun() {</span>
+<span class="fc" id="L18">        this.startTime = -1;</span>
+<span class="fc" id="L19">    }</span>
+    
+    /**
+     * Application de l'effet stun.
+     * @param character personnage (model)
+     */
+    public void effectsManager(CharacterModel character) {
+        long currentTime;
+        
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (this.startTime &lt; 0) {</span>
+<span class="fc" id="L29">            this.startTime = System.currentTimeMillis();</span>
+        }
+        
+<span class="fc" id="L32">        currentTime = System.currentTimeMillis();</span>
+        // Au bout d'un certain temps, l'effet disparait
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (currentTime &gt;= startTime + duration) {</span>
+<span class="nc" id="L35">            character.setPowerIsBlock(false);</span>
+<span class="nc" id="L36">            character.getEffects().remove(EffectStatusEnum.STUN);</span>
+<span class="nc" id="L37">            character.getEffects().add(EffectStatusEnum.IMMUNITY_TO_STUN);</span>
+<span class="nc" id="L38">            this.startTime = -1;</span>
+        } else {
+<span class="fc" id="L40">            character.setStep(0); </span>
+<span class="fc" id="L41">            character.setPowerIsBlock(true);</span>
+        }
+<span class="fc" id="L43">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

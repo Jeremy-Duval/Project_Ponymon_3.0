@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HostConnect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.reseau.host</a> &gt; <span class="el_source">HostConnect.java</span></div><h1>HostConnect.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.reseau.host;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.model.FieldModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interface;
+
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+
+public class HostConnect extends Thread {
+
+    protected int port;
+    private FieldModel model;
+<span class="fc" id="L17">    private boolean running = true;</span>
+    ArrayList&lt;Interface&gt; inter;
+    ArrayList&lt;HostThread&gt; enfants;
+    private int nombreJoueurs;
+
+    /**
+     * Constructeur de HostConnect.
+     */
+<span class="fc" id="L25">    public HostConnect(int p, FieldModel fm,int nombreJoueurs) {</span>
+<span class="fc" id="L26">        model = fm;</span>
+<span class="fc" id="L27">        port = p;</span>
+<span class="fc" id="L28">        this.nombreJoueurs = nombreJoueurs;</span>
+<span class="fc" id="L29">    }</span>
+
+
+    /**
+     * Crée des sockets lorsque les clients se connectent.
+     */
+    @Override
+    public void run() {
+<span class="fc" id="L37">        inter = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L38">        enfants = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L39">        Socket s = null;</span>
+<span class="fc" id="L40">        ServerSocket ss = null;</span>
+        //System.out.println(&quot;Ouverture de la connexion Hote&quot;);
+        try {
+<span class="fc" id="L43">            ss = new ServerSocket(port);</span>
+<span class="nc" id="L44">        } catch (IOException e) {</span>
+<span class="nc" id="L45">            e.printStackTrace();</span>
+<span class="fc" id="L46">        }</span>
+
+<span class="fc" id="L48">        int i = 1;</span>
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        while (running) {</span>
+            if (true) {
+                try {
+<span class="fc" id="L53">                    s = ss.accept();</span>
+<span class="nc" id="L54">                } catch (IOException e) {</span>
+<span class="nc" id="L55">                    System.out.println(&quot;I/O error: &quot; + e);</span>
+<span class="fc" id="L56">                }</span>
+                // Création d' un thread pour un client
+<span class="fc" id="L58">                inter.add(new Interface(model, i));</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (i &gt; nombreJoueurs) {  //condition sur le nombre de clients connectables</span>
+<span class="fc" id="L60">                    inter.get(i - 1).setQuit(true);</span>
+                }
+<span class="fc" id="L62">                HostThread temp = new HostThread(s, inter.get(i - 1));</span>
+<span class="fc" id="L63">                enfants.add(temp);</span>
+<span class="fc" id="L64">                temp.start();</span>
+<span class="fc" id="L65">                i++;</span>
+<span class="fc" id="L66">            }</span>
+        }
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        for (HostThread miniHost : enfants) {</span>
+            try {
+<span class="nc" id="L70">                miniHost.join();</span>
+<span class="nc" id="L71">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L72">                e.printStackTrace();</span>
+<span class="nc" id="L73">            }</span>
+<span class="nc" id="L74">        }</span>
+
+        try {
+<span class="nc" id="L77">            ss.close();</span>
+<span class="nc" id="L78">        } catch (IOException e) {</span>
+<span class="nc" id="L79">            e.printStackTrace();</span>
+<span class="nc" id="L80">        }</span>
+
+<span class="nc" id="L82">    }</span>
+
+    /**
+     * Verifie que tout les clients sont prets.
+     * et leur envoie que la partie va commencer le cas echeant.
+     */
+    public boolean askBeginning() {
+<span class="nc" id="L89">        boolean ready = true;</span>
+        int i;
+<span class="nc bnc" id="L91" title="All 4 branches missed.">        for (i = 0; i &lt; inter.size() &amp;&amp; i &lt; nombreJoueurs; i++) {</span>
+<span class="nc bnc" id="L92" title="All 4 branches missed.">            ready = ready &amp;&amp; inter.get(i).isReady();</span>
+        }
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (i &lt; nombreJoueurs) {</span>
+<span class="nc" id="L96">            ready = false;</span>
+        }
+
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (ready) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            for (Interface anInter : inter) {</span>
+<span class="nc" id="L101">                anInter.setBeginning(true);</span>
+<span class="nc" id="L102">            }</span>
+        }
+<span class="nc" id="L104">        return ready;</span>
+    }
+
+    public ArrayList&lt;Interface&gt; getInter() {
+<span class="fc" id="L108">        return inter;</span>
+    }
+
+    /**
+     * Envoie a thread l arret de la connection.
+     * Arrete la creation de nouveaux sockets.
+     */
+    public void setQuit() {
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        for (Interface anInter : inter) {</span>
+<span class="nc" id="L117">            anInter.setQuit(true);</span>
+<span class="nc" id="L118">        }</span>
+<span class="nc" id="L119">        running = false;</span>
+<span class="nc" id="L120">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

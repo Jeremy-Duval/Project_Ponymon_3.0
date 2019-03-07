@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerConnect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.reseau.customer</a> &gt; <span class="el_source">CustomerConnect.java</span></div><h1>CustomerConnect.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.reseau.customer;// A simple Client Server Protocol .. Client for Echo Server
+
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interface;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Envoi;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Reception;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info.Connect;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info.JmpPwr;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Info.Ready;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur.InterpreteurBeginning;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur.InterpreteurMap;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interpreteur.InterpreteurUpdateModel;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+
+public class CustomerConnect extends Thread {
+    private Interface inter;
+    private InetAddress address;
+<span class="fc" id="L20">    private Socket s1 = null;</span>
+    protected int port;
+
+    /**
+     * Constructeur de coustomerconnect.
+     * @param ip addresse de l'hote.
+     * @param port port de l'hote.
+     * @param inter interface avec le modele.
+     * @param pseudo pseudo client.
+     */
+<span class="fc" id="L30">    CustomerConnect(InetAddress ip, int port, Interface inter, String pseudo) {</span>
+<span class="fc" id="L31">        this.address = ip;</span>
+<span class="fc" id="L32">        this.port = port;</span>
+<span class="fc" id="L33">        this.inter = inter;</span>
+<span class="fc" id="L34">        this.inter.setPseudo(pseudo);</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public void run() {
+        //System.out.println(&quot;Ouverture de la connexion Client&quot;);
+        try {
+<span class="fc" id="L41">            s1 = new Socket(address, port);</span>
+<span class="nc" id="L42">        } catch (IOException e) {</span>
+<span class="nc" id="L43">            e.printStackTrace();</span>
+<span class="nc" id="L44">            System.err.print(&quot;IO Exception&quot;);</span>
+<span class="fc" id="L45">        }</span>
+
+        try {
+<span class="fc" id="L48">            new Envoi(s1, new Connect(inter.getPseudo(),inter.getQuit())).run();</span>
+<span class="nc" id="L49">        } catch (IOException e) {</span>
+<span class="nc" id="L50">            e.printStackTrace();</span>
+<span class="nc" id="L51">            inter.setQuit(true);</span>
+<span class="fc" id="L52">        }</span>
+        try {
+<span class="fc" id="L54">            new Reception(s1,new InterpreteurMap(),inter).run();</span>
+<span class="nc" id="L55">        } catch (IOException e) {</span>
+<span class="nc" id="L56">            e.printStackTrace();</span>
+<span class="nc" id="L57">            inter.setQuit(true);</span>
+<span class="fc" id="L58">        }</span>
+<span class="fc" id="L59">        synchronized (inter.getLock()) {</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            while (!inter.isReady()) {</span>
+                try {
+<span class="fc" id="L62">                    inter.getLock().wait();</span>
+<span class="nc" id="L63">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L64">                    e.printStackTrace();</span>
+<span class="nc" id="L65">                    inter.setQuit(true);</span>
+<span class="pc" id="L66">                }</span>
+            }
+<span class="pc" id="L68">        }</span>
+        try {
+<span class="fc" id="L70">            new Envoi(s1, new Ready(inter.getCharacter(),inter.getQuit())).run();</span>
+<span class="nc" id="L71">        } catch (IOException e) {</span>
+<span class="nc" id="L72">            e.printStackTrace();</span>
+<span class="nc" id="L73">            inter.setQuit(true);</span>
+<span class="fc" id="L74">        }</span>
+        try {
+<span class="nc" id="L76">            new Reception(s1,new InterpreteurBeginning(),inter).run();</span>
+<span class="fc" id="L77">        } catch (IOException e) {</span>
+<span class="fc" id="L78">            e.printStackTrace();</span>
+<span class="fc" id="L79">            inter.setQuit(true);</span>
+<span class="nc" id="L80">        }</span>
+<span class="fc" id="L81">        boolean quit = false;</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        while (!quit) {</span>
+            try {
+<span class="nc" id="L84">                new Reception(s1,new InterpreteurUpdateModel(),inter).run();</span>
+<span class="fc" id="L85">            } catch (IOException e) {</span>
+                //e.printStackTrace();
+<span class="fc" id="L87">                inter.setQuit(true);</span>
+<span class="nc" id="L88">            }</span>
+            try {
+<span class="fc" id="L90">                new Envoi(s1, new JmpPwr(inter.getJmp(),inter.getPwr(),inter.getQuit())).run();</span>
+<span class="nc" id="L91">            } catch (IOException e) {</span>
+                //e.printStackTrace();
+<span class="nc" id="L93">                inter.setQuit(true);</span>
+<span class="fc" id="L94">            }</span>
+<span class="fc" id="L95">            quit = inter.getQuit();</span>
+        }
+        try {
+<span class="fc" id="L98">            s1.close();</span>
+<span class="nc" id="L99">        } catch (IOException e) {</span>
+<span class="nc" id="L100">            e.printStackTrace();</span>
+<span class="fc" id="L101">        }</span>
+        //System.out.println(&quot;Connection Closed&quot;);
+<span class="fc" id="L103">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

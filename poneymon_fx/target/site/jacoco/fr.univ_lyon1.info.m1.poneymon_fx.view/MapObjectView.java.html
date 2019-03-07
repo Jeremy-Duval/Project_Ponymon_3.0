@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapObjectView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">MapObjectView.java</span></div><h1>MapObjectView.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.model.MapObject;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ObjectBooster;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ObjectObstacle;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ObjectPuddle;
+import java.util.concurrent.ConcurrentHashMap;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
+/**
+ * View for the objects to place on the map.
+ * 
+ * @author jeremy
+ */
+public class MapObjectView implements View {
+    /**
+     * Position verticale actuelle du personnage.
+     */
+    private final double y;
+    /**
+     * Position horizontale de l'objet.
+     */
+    private final int x;
+    /**
+     * Image représentant l'objet.
+     */
+<span class="nc" id="L28">    private static ConcurrentHashMap&lt;String, Image&gt; imgObject </span>
+            = new ConcurrentHashMap&lt;String, Image&gt;();
+    /**
+     * Contexte graphique dans lequel on va afficher l'objet.
+     */
+    private GraphicsContext graphicsContext;
+    /**
+     * Modèle de l'objet à afficher.
+     */
+    private MapObject mapObject;
+    /**
+     * Nom de la classe model de l'objet.
+     */
+    private String mapObjectClassName;
+    
+    
+    /**
+     * Constructeur de MapObjectView.
+     *
+     * @param gc      ContextGraphic dans lequel on va afficher l'objet
+     * @param x position x de l'objet (en pixel)
+     * @param y position y de l'objet (en pixel)
+     */
+<span class="nc" id="L51">    MapObjectView(GraphicsContext gc, int x, int y, MapObject objectModel) {</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (gc != null) {</span>
+<span class="nc" id="L53">            graphicsContext = gc;</span>
+        }
+        
+<span class="nc" id="L56">        this.setModel(objectModel);</span>
+        
+<span class="nc" id="L58">        this.x = x;</span>
+<span class="nc" id="L59">        this.y = y - imgObject.get(this.mapObjectClassName).getHeight();</span>
+<span class="nc" id="L60">    }</span>
+    
+    /**
+     * Charge les images du personnage.
+     */
+    private void loadAssets() {
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (this.mapObject instanceof ObjectObstacle) {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            if (!imgObject.containsKey(mapObjectClassName)) {</span>
+<span class="nc" id="L68">                imgObject.put(mapObjectClassName, new Image(&quot;assets/objects/obstacle.png&quot;));</span>
+            }
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        } else if (this.mapObject instanceof ObjectPuddle) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            if (!imgObject.containsKey(mapObjectClassName)) {</span>
+<span class="nc" id="L72">                imgObject.put(mapObjectClassName, new Image(&quot;assets/objects/puddle.png&quot;));</span>
+            }
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        } else if (this.mapObject instanceof ObjectBooster) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (!imgObject.containsKey(mapObjectClassName)) {</span>
+<span class="nc" id="L76">                imgObject.put(mapObjectClassName, new Image(&quot;assets/objects/apple.png&quot;));</span>
+            }
+        }
+<span class="nc" id="L79">    }</span>
+    
+    /**
+     * Attribut le modèle de données à prendre en charge.
+     *
+     * @param objectModel Modèle d'objet à gérer
+     */
+    private void setModel(MapObject objectModel) {
+<span class="nc" id="L87">        this.mapObject = objectModel;</span>
+<span class="nc" id="L88">        mapObjectClassName = this.mapObject.getClass().toString();</span>
+        
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (this.graphicsContext != null) {</span>
+            // On charge l'image associée à l'objet
+<span class="nc" id="L92">            this.loadAssets();</span>
+        }
+<span class="nc" id="L94">    }</span>
+    
+    /**
+     * Affichage de l'objet.
+     */
+    public void display() {
+<span class="nc" id="L100">        graphicsContext.drawImage(imgObject.get(this.mapObjectClassName), x, y);</span>
+<span class="nc" id="L101">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CharacterModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.model</a> &gt; <span class="el_source">CharacterModel.java</span></div><h1>CharacterModel.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.model;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.model.jump.Jump;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ai.AiFactory;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ai.AiStrategy;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.jump.JumpState;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.effectsManagement.EffectsManagement;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.objectEffects.EffectStatusEnum;
+import fr.univ_lyon1.info.m1.poneymon_fx.observer.UpdateObservable;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.NetworkInterface;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.customer.Customer;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Class contain data for the characters.
+ *
+ * @author jeremy
+ */
+public abstract class CharacterModel extends UpdateObservable implements Serializable {
+    /**
+     * Ligne sur laquelle évolue le personnage.
+     */
+    private int row;
+    /**
+     * Couleur du personnage.
+     */
+    private final ColorEnum color;
+    private final AiStrategy ai;
+    private final List&lt;CharacterModel&gt; neighbors;
+    private String pseudo;
+    /**
+     * Indique si le personnage saute.
+     */
+<span class="fc" id="L39">    private JumpState jumpState = JumpState.noJumping;</span>
+    /**
+     * Progrès du saut du personnage (compris entre 0.0 et 1.0).
+     */
+<span class="fc" id="L43">    private double jumpProgress = 0.0;</span>
+    protected Jump jump;
+
+    /**
+     * Nombre d'utilisation du pouvoir restant.
+     */
+<span class="fc" id="L49">    int remainingPowers = 3;</span>
+    /**
+     * Vrai si le personnage est actuellement en train d'utiliser son pouvoir.
+     */
+<span class="fc" id="L53">    boolean powered = false;</span>
+    /**
+     * Vrai si le personnage ne peut pas utiliser son pouvoir (ex : à cause d'effets).
+     */
+<span class="fc" id="L57">    boolean powerIsBlock = false;</span>
+    /**
+     * Progrès du personnage sur sa rangée (compris entre 0.0 et 1.0).
+     */
+<span class="fc" id="L61">    private double progress = 0.0;</span>
+    /**
+     * Vitesse actuelle du personnage.
+     */
+    private double speed;
+    /*
+     * Pas de progression du personnage.
+     */
+    private double step;
+    /**
+     * Numéro du tour que le personnage est en train de courir.
+     */
+<span class="fc" id="L73">    private int currentLap = 0;</span>
+    /**
+     * Liste contenant les différents effets affectant le poney.
+     */
+    private EnumSet&lt;EffectStatusEnum&gt; effectStatus;
+    /**
+     * Liste contenant les manières de gérer les effets que peut subir le personnage.
+     */
+    protected ConcurrentHashMap&lt;EffectStatusEnum, EffectsManagement&gt; effectManagers;
+    /**
+     * Prochain objet sur la map (champ de vision du perso).
+     */
+    private MapObject nextObjectOnMap;
+    /**
+     * Distance (progression entre 0 et 1) entre le perso et le prochain objet.
+     */
+    private double distanceBtwObj;
+
+    private ModeEnum mode;
+
+    private NetworkInterface net;
+
+    /**
+     * Constructeur du CharacterModel.
+     *
+     * @param color Couleur du personnage
+     * @param row   Rangée sur laquelle évolue le personnage
+     */
+    public CharacterModel(ColorEnum color, int row, boolean isAi,
+<span class="fc" id="L102">            ModeEnum mode,NetworkInterface net) {</span>
+<span class="fc" id="L103">        effectStatus = EnumSet.noneOf(EffectStatusEnum.class);</span>
+<span class="fc" id="L104">        effectManagers = new ConcurrentHashMap&lt;EffectStatusEnum, EffectsManagement&gt;();</span>
+        
+<span class="fc" id="L106">        this.init();</span>
+        
+<span class="fc" id="L108">        this.row = row;</span>
+<span class="fc" id="L109">        this.color = color;</span>
+
+<span class="fc" id="L111">        setRandomSpeed();</span>
+<span class="fc" id="L112">        neighbors = new ArrayList&lt;CharacterModel&gt;();</span>
+
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (isAi) {</span>
+<span class="fc" id="L115">            this.ai = AiFactory.getAi();</span>
+        } else {
+<span class="fc" id="L117">            this.ai = null;</span>
+        }
+
+<span class="fc" id="L120">        this.mode = mode;</span>
+<span class="fc" id="L121">        this.net = net;</span>
+<span class="fc" id="L122">    }</span>
+
+    public CharacterModel(ColorEnum color, int row) {
+<span class="fc" id="L125">        this(color, row, false,ModeEnum.LOCAL,null);</span>
+<span class="fc" id="L126">    }</span>
+    
+    /**
+     * Constructeur du PoneyModel.
+     *
+     * @param color Couleur du poney
+     * @param row   Rangée sur laquelle évolue le poney
+     * @param mode local ou en ligne
+     * @param net NetworkInterface
+     */
+    public CharacterModel(ColorEnum color, int row, ModeEnum mode, NetworkInterface net) {
+<span class="fc" id="L137">        this(color, row, false, mode, net);</span>
+<span class="fc" id="L138">    }</span>
+    
+    /**
+     * Initialisation des managers d'effet, saut, nb de boost...
+     */
+<span class="nc" id="L143">    protected void init() {}</span>
+
+
+    /**
+     * Change la vitesse du personnage aléatoirement.
+     */
+    private void setRandomSpeed() {
+<span class="fc" id="L150">        Random randomGenerator = new Random();</span>
+<span class="fc" id="L151">        this.speed = 1.0f - randomGenerator.nextFloat();</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (this.speed &lt; 0.3f) {</span>
+<span class="fc" id="L153">            this.speed = 0.3f;</span>
+        }
+
+<span class="fc" id="L156">    }</span>
+    
+    /**
+     * Renvoie la ligne sur laquelle évolue le personnage.
+     *
+     * @return Row on which the character is placed
+     */
+    public int getRow() {
+<span class="fc" id="L164">        return this.row;</span>
+    }
+
+    /**
+     * Renvoie l'avancement du personnage dans un tour (compris entre 0.0 et
+     * 1.0).
+     *
+     * @return Progress of the personnage on the lap
+     */
+    public double getProgress() {
+<span class="fc" id="L174">        return this.progress;</span>
+    }
+    
+    /**
+     * Renvoie la progression du saut du personnage (compris entre 0.0 et
+     * 1.0).
+     *
+     * @return Progress of the jump of the personnage
+     */
+    public double getJumpProgress() {
+<span class="fc" id="L184">        return this.jumpProgress;</span>
+    }
+
+    /**
+     * Renvoie la couleur du personnage.
+     *
+     * @return couleur du personnage
+     */
+    public ColorEnum getColor() {
+<span class="fc" id="L193">        return this.color;</span>
+    }
+
+    /**
+     * Calcul le pas que le poney doit avancer pendant un tour selon sa
+     * vitesse et les différents multiplicateurs.
+     *
+     * @return Pas que le poney doit avancer ce tour
+     */
+    public double computeStep() {
+        /*
+        * Multiplieur pour la vitesse horizontal pour changer la vitesse du jeu.
+        */
+<span class="fc" id="L206">        double stepSize = 0.002;</span>
+<span class="fc" id="L207">        return stepSize * this.speed;</span>
+    }
+
+    /**
+     * Deplacement du personnage.
+     * 
+     * @return true si la position a changée
+     */
+    public boolean update() {
+<span class="fc" id="L216">        step = this.computeStep();</span>
+        
+        // traitement des effets (SlowDown, Stun...)
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        for (EffectStatusEnum e : this.effectStatus) {</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">            if (this.effectManagers.containsKey(e)) {</span>
+<span class="fc" id="L221">                this.effectManagers.get(e).effectsManager(this);</span>
+            }
+<span class="fc" id="L223">        }</span>
+        
+<span class="fc" id="L225">        this.progress += step;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (this.progress &gt; 1) {</span>
+<span class="fc" id="L227">            this.progress = 0;</span>
+<span class="fc" id="L228">            ++this.currentLap;</span>
+<span class="fc" id="L229">            setRandomSpeed();</span>
+<span class="fc" id="L230">            this.finishLap();</span>
+<span class="fc" id="L231">            this.notifyObservers();</span>
+        }
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (this.ai != null) {</span>
+<span class="fc" id="L234">            this.ai.run(this);</span>
+        }
+<span class="fc" id="L236">        this.updateJump();</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        return step != 0;</span>
+    }
+    
+    private void updateJump() {
+<span class="fc" id="L241">        this.jumpProgress = this.jump.jump(this.jumpState, this.jumpProgress);</span>
+<span class="fc bfc" id="L242" title="All 4 branches covered.">        if (this.jumpState.equals(JumpState.goUp) &amp;&amp; this.jumpProgress &gt;= 1.0) {</span>
+<span class="fc" id="L243">            this.jumpState = JumpState.goDown;</span>
+<span class="fc bfc" id="L244" title="All 4 branches covered.">        } else if (this.jumpState.equals(JumpState.goDown) &amp;&amp; this.jumpProgress &lt;= 0.0) {</span>
+<span class="fc" id="L245">            this.jumpState = JumpState.noJumping;</span>
+<span class="fc" id="L246">            this.jumpProgress = 0.0;</span>
+        }
+<span class="fc" id="L248">    }</span>
+
+
+    /**
+     * Renvoie le tour que le personnage est en train de parcourir.
+     *
+     * @return Current lap of the character
+     */
+    public int getCurrentLap() {
+<span class="fc" id="L257">        return this.currentLap;</span>
+    }
+
+    /**
+     * Vrai si le personnage est en train d'utiliser son pouvoir.
+     *
+     * @return True if this character is using their power
+     */
+    public boolean isPowered() {
+<span class="fc" id="L266">        return this.powered;</span>
+    }
+
+    /**
+     * Nombre d'utilisation du pouvoir restant.
+     *
+     * @return Number of remaining use for the power
+     */
+    public int getRemainingPower() {
+<span class="fc" id="L275">        return this.remainingPowers;</span>
+    }
+
+    /**
+     * Utilise le pouvoir ou le redirige vers l hote de la partie suivant le mode de l'application.
+     */
+    public void tryUsePower() {
+<span class="nc bnc" id="L282" title="All 2 branches missed.">        if (mode == ModeEnum.LOCAL) {</span>
+<span class="nc" id="L283">            this.usePower();</span>
+        }
+<span class="nc bnc" id="L285" title="All 4 branches missed.">        if (mode == ModeEnum.HOST &amp;&amp; row == 0) {</span>
+<span class="nc" id="L286">            this.usePower();</span>
+        }
+<span class="nc bnc" id="L288" title="All 2 branches missed.">        if (mode == ModeEnum.CUSTOMER) {</span>
+<span class="nc" id="L289">            ((Customer)net).setPower();</span>
+        }
+<span class="nc" id="L291">    }</span>
+
+    /**
+     * Appelé quand on essaye de déclencher le pouvoir du personnage.
+     */
+    public void usePower() {
+<span class="pc bpc" id="L297" title="1 of 6 branches missed.">        if (this.remainingPowers &gt; 0 &amp;&amp; !this.isPowered() &amp;&amp; !this.powerIsBlock) {</span>
+<span class="fc" id="L298">            this.powered = true;</span>
+<span class="fc" id="L299">            --this.remainingPowers;</span>
+<span class="fc" id="L300">            this.notifyObservers();</span>
+        }
+<span class="fc" id="L302">    }</span>
+
+    /**
+     * Utilise le saut ou le redirige vers l hote de la partie suivant le mode de l'application.
+     */
+    public void tryUseJump() {
+     /*   if (mode == ModeEnum.LOCAL) {
+            this.useJump();
+        }
+        if (mode == ModeEnum.HOST &amp;&amp; row == 0) {
+            this.useJump();
+        }
+        if (mode == ModeEnum.CUSTOMER) {
+            ((Customer)net).setJump();
+        }
+     */
+<span class="nc" id="L318">    }</span>
+
+    /**
+     * Appelée à la fin de chaque tour pour réinitialiser certaines variables
+     * si besoin.
+     */
+    void finishLap() {
+<span class="fc" id="L325">        this.powered = false;</span>
+<span class="fc" id="L326">    }</span>
+
+
+    public void addNeighbor(CharacterModel model) {
+<span class="fc" id="L330">        this.neighbors.add(model);</span>
+<span class="fc" id="L331">    }</span>
+
+    public List&lt;CharacterModel&gt; getNeighbors() {
+<span class="fc" id="L334">        return this.neighbors;</span>
+    }
+    
+    public Jump getJump() {
+<span class="nc" id="L338">        return this.jump;</span>
+    }
+    
+    public JumpState getJumpState() {
+<span class="fc" id="L342">        return this.jumpState;</span>
+    }
+
+    /**
+     * Appelé quand on essaye de déclencher le saut du personnage.
+     */
+    public void useJump() {
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">        if (this.jumpState.equals(JumpState.noJumping)) {</span>
+<span class="fc" id="L350">            this.jumpState = JumpState.goUp;</span>
+        }
+<span class="fc" id="L352">    }</span>
+
+    
+
+    public double distance(CharacterModel other) {
+<span class="fc" id="L357">        return other.currentLap + other.progress - this.currentLap - this.progress;</span>
+    }
+
+    public boolean isAi() {
+<span class="nc bnc" id="L361" title="All 2 branches missed.">        return this.ai != null;</span>
+    }
+
+    public  void setRow(int row) {
+<span class="nc" id="L365">        this.row = row;</span>
+<span class="nc" id="L366">    }</span>
+
+    public void setPseudo(String pseudo) {
+<span class="nc" id="L369">        this.pseudo = pseudo;</span>
+<span class="nc" id="L370">    }</span>
+
+    public String getPseudo() {
+<span class="nc" id="L373">        return pseudo;</span>
+    }
+
+    /**
+     * Copie partiellement le character mis en paramètre.
+     */
+    public void updateChar(CharacterModel character) {
+<span class="nc" id="L380">        this.progress = character.progress;</span>
+<span class="nc" id="L381">        this.powered = character.powered;</span>
+<span class="nc" id="L382">        this.remainingPowers = character.remainingPowers;</span>
+<span class="nc" id="L383">        this.currentLap = character.currentLap;</span>
+<span class="nc" id="L384">        this.speed = character.speed;</span>
+<span class="nc" id="L385">        this.notifyObservers();</span>
+<span class="nc" id="L386">    }</span>
+    
+    /**
+     * Sert à savoir si le personnage est affecté par l'effet en paramètre. 
+     * 
+     * @param effect effet pour lequel on effectu le test
+     * @return true si le personnage est affecté par cet effet, false sinon
+     */
+    public boolean isAffectedBy(EffectStatusEnum effect) {
+<span class="fc" id="L395">        return this.effectStatus.contains(effect);</span>
+    }
+
+    /**
+     * Affecte un effet au personnage.
+     * 
+     * @param effect effet à affecté au personnage
+     */
+    public void addEffect(EffectStatusEnum effect) {
+<span class="fc" id="L404">        this.effectStatus.add(effect);</span>
+<span class="fc" id="L405">    }</span>
+    
+    /**
+     * Renvoie la liste des effets affectant le personnage.
+     * 
+     * @return liste des effets affectant le personnage
+     */
+    public EnumSet getEffects() {
+<span class="fc" id="L413">        return this.effectStatus;</span>
+    }
+    
+    /**
+     * Test si le personnage n'est affecté par aucun effet.
+     * 
+     * @return true si aucun effet affecte le personnage, false sinon 
+     */
+    public boolean hasNoEffects() {
+<span class="fc" id="L422">        return this.effectStatus.isEmpty();</span>
+    }
+    
+    /**
+     * Retire un effet affecté au poney.
+     * 
+     * @param effect effet à retiré
+     * @return true si l'élément à été supprimé
+     */
+    public boolean removeEffect(EffectStatusEnum effect) {
+<span class="fc" id="L432">        return this.effectStatus.remove(effect);</span>
+    }
+
+    public double getStep() {
+<span class="fc" id="L436">        return step;</span>
+    }
+
+    public void setStep(double step) {
+<span class="fc" id="L440">        this.step = step;</span>
+<span class="fc" id="L441">    }</span>
+
+    public void setPowerIsBlock(boolean powerIsBlock) {
+<span class="fc" id="L444">        this.powerIsBlock = powerIsBlock;</span>
+<span class="fc" id="L445">    }</span>
+    
+    /**
+     * Met à jour le champ de vision du personnage.
+     * @param nextObj le prochain objet devant le personnage
+     * @param objPosition la progression (entre 0 et 1) à laquelle se situe l'objet.
+     */
+    public void updateVision(MapObject nextObj, double objPosition) {
+<span class="fc" id="L453">        this.nextObjectOnMap = nextObj;</span>
+<span class="fc" id="L454">        this.distanceBtwObj = objPosition - this.progress;</span>
+<span class="fc" id="L455">    }</span>
+
+    public MapObject getNextObjectOnMap() {
+<span class="fc" id="L458">        return nextObjectOnMap;</span>
+    }
+
+    public double getDistanceBtwObj() {
+<span class="fc" id="L462">        return distanceBtwObj;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

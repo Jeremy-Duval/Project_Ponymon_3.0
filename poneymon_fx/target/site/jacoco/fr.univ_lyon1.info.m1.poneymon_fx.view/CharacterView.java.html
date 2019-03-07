@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CharacterView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">CharacterView.java</span></div><h1>CharacterView.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.model.AquaPoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.CharacterModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.GhostPoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.LamaModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.PoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.observer.KeyEventSubscriber;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
+/**
+ * view for the characters.
+ *
+ * @author jeremy
+ */
+public class CharacterView implements View, KeyEventSubscriber {
+    /**
+     * Largeur de la fenêtre.
+     */
+    private final int windowWidth;
+    /**
+     * Hauteur de la ligne sur laquelle évolue le personnage.
+     */
+    private final int lineHeight;
+    /**
+     * Position horizontal d'origine du personnage (relatif à la taille de
+     * l'image).
+     */
+    private int xInit;
+    /**
+     * Position verticale d'origine du personnage.
+     */
+    private int yInit;
+    /**
+     * Position horizontale actuelle du personnage.
+     */
+    private double x;
+    /**
+     * Position verticale actuelle du personnage.
+     */
+    private double y;
+    /**
+     * Image représentant le personnage qui cours.
+     */
+    private Image runningImage;
+    /**
+     * Image représentant le personnage lorqu'il est boosté.
+     */
+    private Image poweredImage;
+    /**
+     * Contexte graphique dans lequel on va afficher le personnage.
+     */
+    private GraphicsContext graphicsContext;
+    /**
+     * Modèle du personnage à afficher.
+     */
+    private CharacterModel character;
+    /**
+     * Touche servant à déclencher le pouvoir du personnage.
+     */
+    private final BoostKey boostKey;
+    /**
+     * Touche servant à déclencher le saut du personnage.
+     */
+    private final JumpKey jumpKey;
+    /**
+     * Hauteur maximum pour un saut.
+     */
+<span class="nc" id="L70">    private final int maxJumpHeight = 50;</span>
+
+    /**
+     * Constructeur du CharacterView.
+     *
+     * @param gc      ContextGraphic dans lequel on va afficher le character
+     * @param width   Taille de la fenêtre (en pixel)
+     * @param lHeight Hauteur d'une ligne (en pixel)
+     */
+<span class="nc" id="L79">    CharacterView(GraphicsContext gc, int width, int lHeight, BoostKey boostKey, JumpKey jumpKey) {</span>
+<span class="nc" id="L80">        this.windowWidth = width;</span>
+<span class="nc" id="L81">        this.lineHeight = lHeight;</span>
+<span class="nc" id="L82">        this.boostKey = boostKey;</span>
+<span class="nc" id="L83">        this.jumpKey = jumpKey;</span>
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (gc != null) {</span>
+            // gc == null can be provided for testing
+<span class="nc" id="L87">            graphicsContext = gc;</span>
+        } else {
+<span class="nc" id="L89">            xInit = 0;</span>
+        }
+<span class="nc" id="L91">    }</span>
+
+    /**
+     * Constructeur du CharacterView.
+     *
+     * @param gc      ContextGraphic dans lequel on va afficher le character
+     * @param width   taille de la fenêtre (en pixel)
+     * @param lHeight hauteur d'une ligne (en pixel)
+     */
+    CharacterView(GraphicsContext gc, int width, int lHeight) {
+<span class="nc" id="L101">        this(gc, width, lHeight, null, null);</span>
+<span class="nc" id="L102">    }</span>
+
+    /**
+     * Charge les images du personnage.
+     */
+    private void loadAssets() {
+<span class="nc" id="L108">        String baseName = getBaseAssetName(this.character);</span>
+
+<span class="nc" id="L110">        runningImage = new Image(baseName + &quot;-running.gif&quot;);</span>
+<span class="nc" id="L111">        poweredImage = new Image(baseName + &quot;-powered.gif&quot;);</span>
+<span class="nc" id="L112">    }</span>
+
+    /**
+     * Attribut le modèle de données à prendre en charge.
+     *
+     * @param characterModel Modèle de character à gérer
+     */
+    public void setModel(CharacterModel characterModel) {
+<span class="nc" id="L120">        this.character = characterModel;</span>
+
+<span class="nc" id="L122">        this.yInit = character.getRow() * lineHeight;</span>
+<span class="nc" id="L123">        this.y = character.getRow() * lineHeight;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (this.graphicsContext != null) {</span>
+            // gc == null can be provided for testing
+
+            // On charge l'image associée au character
+<span class="nc" id="L128">            this.loadAssets();</span>
+
+<span class="nc" id="L130">            xInit = (int) -runningImage.getWidth();</span>
+<span class="nc" id="L131">            x = xInit;</span>
+        } else {
+<span class="nc" id="L133">            xInit = 0;</span>
+        }
+<span class="nc" id="L135">    }</span>
+
+    /**
+     * Affichage du character.
+     */
+    public void display() {
+<span class="nc" id="L141">        setPosition(character.getProgress(), character.getJumpProgress());</span>
+
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if (this.character.isPowered()) {</span>
+<span class="nc" id="L144">            graphicsContext.drawImage(poweredImage, x, y);</span>
+        } else {
+<span class="nc" id="L146">            graphicsContext.drawImage(runningImage, x, y);</span>
+        }
+<span class="nc" id="L148">    }</span>
+
+    /**
+     * Positionne (en nombre de pixel) le character sur l'axe x, en fonction du
+     * pourcentage de son avancement sur la ligne.
+     *
+     * @param avancement progression sur l'axe des x (de 0.0 à 1.0)
+     */
+    private void setPosition(double avancement, double jumpProgress) {
+<span class="nc" id="L157">        x = avancement * (windowWidth - xInit) + xInit;</span>
+<span class="nc" id="L158">        y = -jumpProgress * maxJumpHeight + yInit;</span>
+<span class="nc" id="L159">    }</span>
+
+    /**
+     * Appelé lorsqu'une touche est pressée, va analyser l'évènement et
+     * déclenché une action si elle est destinataire de cette évènement (sa
+     * touche est la touche pressée).
+     * @param s Touche pressée
+     */
+    public void keyPressed(String s) {
+<span class="nc bnc" id="L168" title="All 4 branches missed.">        if (this.boostKey != null &amp;&amp; this.boostKey.equals(s)) {</span>
+
+<span class="nc" id="L170">            this.character.tryUsePower();</span>
+        }
+<span class="nc bnc" id="L172" title="All 4 branches missed.">        if (this.jumpKey != null &amp;&amp; this.jumpKey.equals(s)) {</span>
+<span class="nc" id="L173">            this.character.useJump();</span>
+        }
+<span class="nc" id="L175">    }</span>
+
+    static String getBaseAssetName(CharacterModel model) {
+<span class="nc" id="L178">        String basename = &quot;&quot;;</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (model instanceof PoneyModel) {</span>
+<span class="nc" id="L180">            basename = &quot;pony-&quot; + model.getColor();</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        } else if (model instanceof LamaModel) {</span>
+<span class="nc" id="L182">            basename = &quot;lama&quot;;</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        } else if (model instanceof GhostPoneyModel) {</span>
+<span class="nc" id="L184">            basename = &quot;pony-ghost&quot;;</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        } else if (model instanceof AquaPoneyModel) {</span>
+<span class="nc" id="L186">            basename = &quot;aquapony&quot;;</span>
+        }
+<span class="nc" id="L188">        return &quot;assets/&quot; + basename;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

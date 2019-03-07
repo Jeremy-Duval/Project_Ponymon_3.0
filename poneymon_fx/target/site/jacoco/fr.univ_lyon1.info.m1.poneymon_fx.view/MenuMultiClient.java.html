@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuMultiClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">MenuMultiClient.java</span></div><h1>MenuMultiClient.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.controler.Controler;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.*;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.Interface;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.customer.Customer;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+import java.util.*;
+
+/**
+ * View for MenuMultiHost.
+ */
+public class MenuMultiClient {
+
+    /**
+     * Une String pour chaque personnage.
+     */
+    private String character1;
+
+    /**
+     * Boolean pour savoir si le joueur est prêt.
+     */
+    private boolean isReady;
+
+    /**
+     * Nom du joueur.
+     */
+    private String name;
+
+    /**
+     * La liste contenant le personnage du joueur.
+     */
+<span class="nc" id="L46">    private List&lt;String&gt; listCharacters = new ArrayList&lt;String&gt;();</span>
+
+    /**
+     * Customer représente le client.
+     */
+    Customer customer;
+
+    /**
+     * FieldModel.
+     */
+    FieldModel fieldModel;
+
+    /**
+     * Constructeur de la vue MenuSolo.
+     */
+<span class="nc" id="L61">    public MenuMultiClient(Customer customer, FieldModel fieldModel) {</span>
+
+<span class="nc" id="L63">        this.customer = customer;</span>
+<span class="nc" id="L64">        this.fieldModel = fieldModel;</span>
+<span class="nc" id="L65">        this.isReady = false;</span>
+        // Fenêtre
+<span class="nc" id="L67">        Stage stage = new Stage();</span>
+<span class="nc" id="L68">        stage.setTitle(&quot;Rejoindre une partie&quot;);</span>
+
+<span class="nc" id="L70">        GridPane grid = new GridPane();</span>
+<span class="nc" id="L71">        grid.setHgap(10);</span>
+<span class="nc" id="L72">        grid.setVgap(10);</span>
+<span class="nc" id="L73">        grid.setPadding(new Insets(25, 25, 25, 25));</span>
+
+        // Bouton quitter
+<span class="nc" id="L76">        Button buttonQuit = new Button(&quot;&lt;&lt;&quot;);</span>
+<span class="nc" id="L77">        buttonQuit.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L80">                MenuMulti mm = new MenuMulti();</span>
+<span class="nc" id="L81">                stage.close();</span>
+<span class="nc" id="L82">            }</span>
+        });
+<span class="nc" id="L84">        grid.add(buttonQuit, 0, 1);</span>
+
+        /*
+        // Port
+        Label labelPort = new Label(&quot;Port&quot;);
+        grid.add(labelPort, 1, 1);
+        TextField textFieldPort = new TextField();
+        grid.add(textFieldPort, 2, 1);
+        // Lister port
+        textFieldPort.textProperty().addListener((observable, oldValue, newValue) -&gt; {
+            this.port = textFieldPort.getText();
+        });
+
+        //Adresse
+        Label labelAdresse = new Label(&quot;Adresse&quot;);
+        grid.add(labelAdresse, 1, 2);
+        TextField textFieldAdresse = new TextField();
+        grid.add(textFieldAdresse, 2, 2);
+        //Listener Adresse
+        textFieldAdresse.textProperty().addListener((observable, oldValue, newValue) -&gt; {
+            this.adresse = textFieldAdresse.getText();
+        });
+*/
+<span class="nc" id="L107">        Label labelName = new Label(&quot;Name&quot;);</span>
+<span class="nc" id="L108">        grid.add(labelName, 1, 3);</span>
+<span class="nc" id="L109">        TextField textFieldName = new TextField();</span>
+<span class="nc" id="L110">        grid.add(textFieldName, 2, 3);</span>
+        //Listener Adresse
+<span class="nc" id="L112">        textFieldName.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L113">            this.name = textFieldName.getText();</span>
+<span class="nc" id="L114">            customer.setPseudo(this.name);</span>
+<span class="nc" id="L115">        });</span>
+
+        // Spinners Characters
+
+        // Spinner Générique
+<span class="nc" id="L120">        SpinnerCharacter sc1 = new SpinnerCharacter();</span>
+
+
+        // 5 copies du générique
+<span class="nc" id="L124">        Spinner s1 = sc1.getSpinner();</span>
+
+
+        // Ajout sur la grille
+<span class="nc" id="L128">        Label labelSpinner = new Label(&quot;Personnage&quot;);</span>
+<span class="nc" id="L129">        grid.add(labelSpinner, 1, 4);</span>
+<span class="nc" id="L130">        grid.add(s1, 2, 4);</span>
+
+
+        // Valeurs par défaut
+<span class="nc" id="L134">        this.character1 = s1.getValue().toString();</span>
+
+
+        // Ajout des listeners
+<span class="nc" id="L138">        s1.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L139">                this.character1 = s1.getValue().toString());</span>
+
+
+<span class="nc" id="L142">        Button buttonPret = new Button(&quot;Prêt&quot;);</span>
+<span class="nc" id="L143">        buttonPret.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L146">                setReady();</span>
+<span class="nc" id="L147">                buttonPret.setDisable(true);</span>
+                CharacterModel poney;
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                if (character1.equals(&quot;lama&quot;)) {</span>
+<span class="nc" id="L150">                    poney = new LamaModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                } else if (character1.equals(&quot;pony&quot;)) {</span>
+<span class="nc" id="L152">                    poney = new PoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                } else if (character1.equals(&quot;aquapony&quot;)) {</span>
+<span class="nc" id="L154">                    poney = new AquaPoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                } else if (character1.equals(&quot;ghost&quot;)) {</span>
+<span class="nc" id="L156">                    poney = new GhostPoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+                } else {
+<span class="nc" id="L158">                    poney = new PoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+                }
+<span class="nc" id="L160">                poney.setPseudo(name);</span>
+<span class="nc" id="L161">                customer.setCharacter(poney);</span>
+<span class="nc" id="L162">                customer.setReady(true);</span>
+
+                /*
+                // Refresher
+                new Timer().schedule(
+                        new TimerTask() {
+
+                            @Override
+                            public void run() {
+                                if(customer.getAnInterface().isBeginning()) {
+                                    Stage stage1 = new Stage();
+                                    JfxView gameView = new JfxView(&quot;Poneymon 2.0 - Jeu&quot;, stage1);
+                                    FieldView fieldView = new FieldView(fieldModel, 600,600);
+                                    Controler controler = Controler.getControler();
+                                    fieldView.setControler(controler);
+                                    controler.addUpdateView(gameView);
+                                    controler.setModel(fieldModel);
+                                    gameView.setView(fieldView);
+                                    controler.startTimer();
+
+                                    stage.close();
+                                }
+                            }
+                        }, 0, 500);*/
+                /*while (!customer.getAnInterface().isBeginning())
+                    synchronized (customer.getAnInterface().getLock()) {
+                        try {
+                            customer.getAnInterface().getLock().wait();
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                        Stage stage1 = new Stage();
+                        JfxView gameView = new JfxView(&quot;Poneymon 2.0 - Jeu&quot;, stage1);
+                        FieldView fieldView = new FieldView(fieldModel, 600,600);
+                        Controler controler = Controler.getControler();
+                        fieldView.setControler(controler);
+                        controler.addUpdateView(gameView);
+                        controler.setModel(fieldModel);
+                        gameView.setView(fieldView);
+                        controler.startTimer();
+
+                        stage.close();
+                    }*/
+<span class="nc" id="L205">            }</span>
+        });
+<span class="nc" id="L207">        grid.add(buttonPret, 2, 5);</span>
+
+        // Provisoire
+        //grid.setGridLinesVisible(true);
+
+        // Affichage fenêtre
+<span class="nc" id="L213">        Scene scene = new Scene(grid, 370, 250);</span>
+<span class="nc" id="L214">        stage.setScene(scene);</span>
+<span class="nc" id="L215">        stage.show();</span>
+<span class="nc" id="L216">    }</span>
+
+    /**
+     * Affichage des attributs pour test.
+     */
+    public void getAttributes() {
+        /*System.out.println(&quot;isReady : &quot; + this.isReady);
+        System.out.println(&quot;C1 : &quot; + this.character1);
+        System.out.println(&quot;Port : &quot; + this.port);
+        System.out.println(&quot;Adresse : &quot; + this.adresse);
+        System.out.println(&quot;Name : &quot; + this.name);*/
+
+<span class="nc" id="L228">    }</span>
+
+    /**
+     * Setter du booléen isReady.
+     */
+    public void setReady() {
+<span class="nc" id="L234">        this.isReady = true;</span>
+<span class="nc" id="L235">    }</span>
+
+    /**
+     * Getter de la liste des personnages.
+     * @return la liste des personnages
+     */
+    public String getListCharacters() {
+<span class="nc" id="L242">        return  this.character1;</span>
+    }
+
+
+    /**
+     * Getter nom du joueur.
+     * @return nom du joueur
+     */
+    public String getName() {
+<span class="nc" id="L251">        return this.name;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FieldView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">FieldView.java</span></div><h1>FieldView.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.App;
+import fr.univ_lyon1.info.m1.poneymon_fx.controler.Controler;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.CharacterModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.FieldModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.Map;
+import javafx.event.EventHandler;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+/**
+ * view for the field.
+ *
+ * @author jeremy
+ */
+public class FieldView extends CanvasView {
+    /**
+     * Contexte graphique dans lequel on va afficher les éléments.
+     */
+    private final GraphicsContext gc;
+    /**
+     * Largeur de la fenêtre.
+     */
+    private final int width;
+    /**
+     * Hauteur de la fenêtre.
+     */
+    private final int height;
+    /**
+     * Tableau de vue pour afficher les personnages.
+     */
+    private final CharacterView[] characters;
+    /**
+     * Map de jeu.
+     */
+    private final MapView map;
+    /**
+     * Modèle du champ de cours.
+     */
+    private final FieldModel fm;
+    /**
+     * Controller à qui on va rapporter les évènements.
+     */
+    private Controler controler;
+
+    /**
+     * Constructeur de FieldView.
+     *
+     * @param fieldModel Modèle de données
+     * @param width      Largeur du canvas
+     * @param height     Hauteur du canvas
+     */
+    public FieldView(FieldModel fieldModel, int width, int height) {
+<span class="nc" id="L57">        super(width, height);</span>
+
+<span class="nc" id="L59">        this.fm = fieldModel;</span>
+<span class="nc" id="L60">        characters = new CharacterView[App.characterNumber];</span>
+
+<span class="nc" id="L62">        this.width = width;</span>
+<span class="nc" id="L63">        this.height = height;</span>
+
+        /*
+         * Permet de capturer le focus et donc les evenements clavier et
+         * souris
+         */
+<span class="nc" id="L69">        this.setFocusTraversable(true);</span>
+
+<span class="nc" id="L71">        gc = this.getGraphicsContext2D();</span>
+
+<span class="nc" id="L73">        BoostKey[] boostKeys = {BoostKey.Q, BoostKey.M, BoostKey.B, BoostKey.N2,</span>
+            BoostKey.N9};
+<span class="nc" id="L75">        JumpKey[] jumpKeys = {JumpKey.A, JumpKey.P, JumpKey.G, JumpKey.N1,</span>
+            JumpKey.N8};
+<span class="nc" id="L77">        int lineHeight = this.height / characters.length;</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        for (int i = 0; i &lt; characters.length; i++) {</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            if (i &lt; App.playerNumber) {</span>
+<span class="nc" id="L81">                characters[i] = new CharacterView(gc, this.width, lineHeight,</span>
+                    boostKeys[i], jumpKeys[i]);
+            } else {
+<span class="nc" id="L84">                characters[i] = new CharacterView(gc, this.width, lineHeight);</span>
+            }
+<span class="nc" id="L86">            characters[i].setModel(fieldModel.getCharacters()[i]);</span>
+        }
+        
+<span class="nc" id="L89">        map = new MapView(gc, width, height, this.fm.getMapModel(), this.fm.getCharacters());</span>
+
+        /*
+         * Event Listener du clavier quand une touche est pressée on rapporte
+         * l'évènement au contrôleur
+         */
+<span class="nc" id="L95">        this.setOnKeyPressed(new EventHandler&lt;KeyEvent&gt;() {</span>
+            public void handle(KeyEvent e) {
+<span class="nc" id="L97">                controler.keyPressed(e.getCode().getName());</span>
+<span class="nc" id="L98">            }</span>
+        });
+<span class="nc" id="L100">    }</span>
+
+    /**
+     * Affiche le personnage gagnant à l'écran.
+     *
+     * @param winner Personnage gagnant
+     */
+    private void win(CharacterModel winner) {
+<span class="nc" id="L108">        gc.setFont(new Font(&quot;Comic Sans MS&quot;, 40));</span>
+<span class="nc" id="L109">        gc.strokeText(&quot;Winner : &quot; + winner.getColor(),</span>
+                (width &gt;&gt; 1) - 150, height &gt;&gt; 1);
+        // &gt;&gt; 1 décalage de bit -&gt; division entière
+<span class="nc" id="L112">    }</span>
+
+    /**
+     * Affichage le terrain et les characters.
+     */
+    public void display() {
+
+        // On nettoie le canvas à chaque frame
+<span class="nc" id="L120">        gc.setFill(Color.LIGHTGRAY);</span>
+<span class="nc" id="L121">        gc.fillRect(0, 0, width, height);</span>
+
+        // Affichage des characters
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (CharacterView character : characters) {</span>
+<span class="nc" id="L125">            character.display();</span>
+        }
+        
+<span class="nc" id="L128">        map.display();</span>
+
+        // On récupère le gagnant et on vérifie si il existe, si oui on
+        // l'affiche
+<span class="nc" id="L132">        CharacterModel winner = fm.getWinner();</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (winner != null) {</span>
+<span class="nc" id="L134">            win(winner);</span>
+        }
+<span class="nc" id="L136">    }</span>
+
+    /**
+     * Défini le contrôleur qui est en charge de cette vue (à qui on va
+     * rapporter les évènements).
+     * @param controler Controler à attribuer à cette vue
+     */
+    public void setControler(Controler controler) {
+<span class="nc" id="L144">        this.controler = controler;</span>
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        for (CharacterView view : this.characters) {</span>
+<span class="nc" id="L147">            this.controler.addSubscriber(view);</span>
+        }
+<span class="nc" id="L149">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

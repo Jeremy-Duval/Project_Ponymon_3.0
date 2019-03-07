@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JfxView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">JfxView.java</span></div><h1>JfxView.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+/**
+ * view for jfx.
+ *
+ * @author jeremy
+ */
+public class JfxView implements View {
+    /**
+     * Groupe de vue à la racine de la fenêtre.
+     */
+    private final Group root;
+    /**
+     * Fenêtre à gérer.
+     */
+    private final Stage stage;
+    /**
+     * Vue à afficher dans la fenêtre.
+     */
+    private CanvasView view;
+
+    /**
+     * Constructeur de JfxView.
+     *
+     * @param title Titre de la fenêtre à créer
+     * @param stage Fenêtre à gérer
+     */
+<span class="nc" id="L32">    public JfxView(String title, Stage stage) {</span>
+<span class="nc" id="L33">        this.stage = stage;</span>
+
+        // Nom de la fenetre
+<span class="nc" id="L36">        this.stage.setTitle(title);</span>
+
+
+<span class="nc" id="L39">        this.root = new Group();</span>
+<span class="nc" id="L40">        Scene scene = new Scene(root);</span>
+
+        // On ajoute la scene a la fenetre
+<span class="nc" id="L43">        this.stage.setScene(scene);</span>
+
+<span class="nc" id="L45">    }</span>
+
+    /**
+     * Défini la vue à afficher dans la fenêtre.
+     *
+     * @param view Vue à attribuer dans la fenêtre
+     */
+    public void setView(CanvasView view) {
+<span class="nc" id="L53">        this.view = view;</span>
+<span class="nc" id="L54">        this.view.setRoot(this.root);</span>
+<span class="nc" id="L55">        this.root.getChildren().add(this.view);</span>
+<span class="nc" id="L56">    }</span>
+
+    /**
+     * Affiche la fenêtre.
+     */
+    public void show() {
+<span class="nc" id="L62">        this.stage.show();</span>
+<span class="nc" id="L63">    }</span>
+
+    /**
+     * Met à jour la fenêtre et sa vue.
+     */
+    public void display() {
+<span class="nc" id="L69">        this.view.display();</span>
+<span class="nc" id="L70">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

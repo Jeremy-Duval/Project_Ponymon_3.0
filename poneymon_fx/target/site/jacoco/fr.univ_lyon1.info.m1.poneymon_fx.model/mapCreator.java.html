@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>mapCreator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.model</a> &gt; <span class="el_source">mapCreator.java</span></div><h1>mapCreator.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.model;
+
+/**
+ * Createur de map.
+ * Placer cette classe dans le package model.
+ * Utiliser setObjectToAllLine ou setObject.
+ * Il y a 5 lignes (si emploi de setObject), 5 colonnes, 15 tours.
+ * Les numérotations vont de 0 à 5.
+ * @author jeremy
+ */
+<span class="nc" id="L11">public class mapCreator {</span>
+
+    public static void main(String[] args) {
+        Map tmp1;
+        Map tmp2;
+        Map tmp3;
+        Map tmp4;
+        Map tmp5;
+<span class="nc" id="L19">        tmp1 = new Map();</span>
+<span class="nc" id="L20">        tmp2 = new Map();</span>
+<span class="nc" id="L21">        tmp3 = new Map();</span>
+<span class="nc" id="L22">        tmp4 = new Map();</span>
+<span class="nc" id="L23">        tmp5 = new Map();</span>
+        // On ajoute les objets à la map
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        for(int i = 0; i &lt;11; i+=4) {</span>
+<span class="nc" id="L30">            tmp1.setObjectToAllLine(new ObjectPuddle(), i, 1);</span>
+<span class="nc" id="L31">            tmp1.setObjectToAllLine(new ObjectPuddle(), i, 2);</span>
+<span class="nc" id="L32">            tmp1.setObjectToAllLine(new ObjectPuddle(), i, 3);</span>
+
+<span class="nc" id="L34">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+1, 1);</span>
+<span class="nc" id="L35">            tmp1.setObjectToAllLine(new ObjectObstacle(), i+1, 2);</span>
+<span class="nc" id="L36">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+1, 3);</span>
+
+<span class="nc" id="L38">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+2, 0);</span>
+<span class="nc" id="L39">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+2, 2);</span>
+<span class="nc" id="L40">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+2, 4);</span>
+
+<span class="nc" id="L42">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+3, 0);</span>
+<span class="nc" id="L43">            tmp1.setObjectToAllLine(new ObjectBooster(), i+3, 2);</span>
+<span class="nc" id="L44">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+3, 3);</span>
+<span class="nc" id="L45">            tmp1.setObjectToAllLine(new ObjectPuddle(), i+3, 4);</span>
+        }
+        // On nomme la map
+<span class="nc" id="L48">        tmp1.save(&quot;aquaLand&quot;);</span>
+
+
+        ////////////////////////////////////////////////////////////////////////
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i = 0; i &lt;10; i+=5) {</span>
+<span class="nc" id="L54">            tmp2.setObjectToAllLine(new ObjectObstacle(), i, 1);</span>
+<span class="nc" id="L55">            tmp2.setObjectToAllLine(new ObjectObstacle(), i, 3);</span>
+
+<span class="nc" id="L57">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+1, 1);</span>
+<span class="nc" id="L58">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+1, 3);</span>
+
+<span class="nc" id="L60">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+2, 1);</span>
+<span class="nc" id="L61">            tmp2.setObjectToAllLine(new ObjectPuddle(), i+2, 2);</span>
+<span class="nc" id="L62">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+2, 3);</span>
+<span class="nc" id="L63">            tmp2.setObjectToAllLine(new ObjectPuddle(), i+2, 4);</span>
+
+<span class="nc" id="L65">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+3, 1);</span>
+<span class="nc" id="L66">            tmp2.setObjectToAllLine(new ObjectBooster(), i+3, 2);</span>
+<span class="nc" id="L67">            tmp2.setObjectToAllLine(new ObjectPuddle(), i+3, 3);</span>
+<span class="nc" id="L68">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+3, 4);</span>
+
+<span class="nc" id="L70">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+4, 1);</span>
+<span class="nc" id="L71">            tmp2.setObjectToAllLine(new ObjectBooster(), i+4, 2);</span>
+<span class="nc" id="L72">            tmp2.setObjectToAllLine(new ObjectObstacle(), i+4, 3);</span>
+<span class="nc" id="L73">            tmp2.setObjectToAllLine(new ObjectBooster(), i+4, 4);</span>
+        }
+        // On nomme la map
+<span class="nc" id="L76">        tmp2.save(&quot;pikou&quot;);</span>
+
+        ////////////////////////////////////////////////////////////////////////
+
+<span class="nc" id="L80">        tmp3.save(&quot;empty&quot;);</span>
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        for(int i = 0; i &lt;10; i+=5) {</span>
+<span class="nc" id="L86">            tmp4.setObjectToAllLine(new ObjectBooster(), i, 1);</span>
+<span class="nc" id="L87">            tmp4.setObjectToAllLine(new ObjectObstacle(), i, 2);</span>
+<span class="nc" id="L88">            tmp4.setObjectToAllLine(new ObjectPuddle(), i, 4);</span>
+
+<span class="nc" id="L90">            tmp4.setObjectToAllLine(new ObjectObstacle(), i+1, 1);</span>
+<span class="nc" id="L91">            tmp4.setObjectToAllLine(new ObjectBooster(), i+1, 2);</span>
+<span class="nc" id="L92">            tmp4.setObjectToAllLine(new ObjectObstacle(), i+1, 3);</span>
+
+<span class="nc" id="L94">            tmp4.setObjectToAllLine(new ObjectBooster(), i+2, 1);</span>
+<span class="nc" id="L95">            tmp4.setObjectToAllLine(new ObjectPuddle(), i+2, 2);</span>
+<span class="nc" id="L96">            tmp4.setObjectToAllLine(new ObjectBooster(), i+2, 3);</span>
+<span class="nc" id="L97">            tmp4.setObjectToAllLine(new ObjectPuddle(), i+2, 4);</span>
+
+<span class="nc" id="L99">            tmp4.setObjectToAllLine(new ObjectBooster(), i+3, 1);</span>
+<span class="nc" id="L100">            tmp4.setObjectToAllLine(new ObjectObstacle(), i+3, 2);</span>
+<span class="nc" id="L101">            tmp4.setObjectToAllLine(new ObjectBooster(), i+3, 3);</span>
+<span class="nc" id="L102">            tmp4.setObjectToAllLine(new ObjectObstacle(), i+3, 4);</span>
+
+<span class="nc" id="L104">            tmp4.setObjectToAllLine(new ObjectObstacle(), i+4, 1);</span>
+<span class="nc" id="L105">            tmp4.setObjectToAllLine(new ObjectBooster(), i+4, 2);</span>
+<span class="nc" id="L106">            tmp4.setObjectToAllLine(new ObjectObstacle(), i+4, 3);</span>
+<span class="nc" id="L107">            tmp4.setObjectToAllLine(new ObjectPuddle(), i+4, 4);</span>
+        }
+        // On nomme la map
+<span class="nc" id="L110">        tmp4.save(&quot;boosted&quot;);</span>
+
+        ////////////////////////////////////////////////////////////////////////
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        for(int i = 0; i &lt;8; i+=7) {</span>
+<span class="nc" id="L115">            tmp5.setObjectToAllLine(new ObjectPuddle(), i, 1);</span>
+<span class="nc" id="L116">            tmp5.setObjectToAllLine(new ObjectBooster(), i, 2);</span>
+<span class="nc" id="L117">            tmp5.setObjectToAllLine(new ObjectPuddle(), i, 3);</span>
+<span class="nc" id="L118">            tmp5.setObjectToAllLine(new ObjectBooster(), i, 4);</span>
+
+
+<span class="nc" id="L121">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+1, 0);</span>
+<span class="nc" id="L122">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+1, 1);</span>
+<span class="nc" id="L123">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+1, 3);</span>
+
+
+<span class="nc" id="L126">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+2, 0);</span>
+<span class="nc" id="L127">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+2, 1);</span>
+<span class="nc" id="L128">            tmp5.setObjectToAllLine(new ObjectBooster(), i+2, 2);</span>
+<span class="nc" id="L129">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+2, 3);</span>
+<span class="nc" id="L130">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+2, 4);</span>
+
+
+<span class="nc" id="L133">            tmp5.setObjectToAllLine(new ObjectBooster(), i+3, 0);</span>
+<span class="nc" id="L134">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+3, 1);</span>
+<span class="nc" id="L135">            tmp5.setObjectToAllLine(new ObjectBooster(), i+3, 2);</span>
+<span class="nc" id="L136">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+3, 3);</span>
+
+<span class="nc" id="L138">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+4, 1);</span>
+<span class="nc" id="L139">            tmp5.setObjectToAllLine(new ObjectBooster(), i+4, 2);</span>
+<span class="nc" id="L140">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+4, 3);</span>
+<span class="nc" id="L141">            tmp5.setObjectToAllLine(new ObjectPuddle(), i+4, 4);</span>
+
+<span class="nc" id="L143">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+5, 0);</span>
+<span class="nc" id="L144">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+5, 2);</span>
+<span class="nc" id="L145">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+5, 4);</span>
+
+<span class="nc" id="L147">            tmp5.setObjectToAllLine(new ObjectBooster(), i+6, 0);</span>
+<span class="nc" id="L148">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+6, 1);</span>
+<span class="nc" id="L149">            tmp5.setObjectToAllLine(new ObjectObstacle(), i+6, 3);</span>
+        }
+        // On nomme la map
+<span class="nc" id="L152">        tmp5.save(&quot;jump&quot;);</span>
+
+<span class="nc" id="L154">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

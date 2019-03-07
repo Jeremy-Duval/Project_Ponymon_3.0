@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuMultiHost.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">MenuMultiHost.java</span></div><h1>MenuMultiHost.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.App;
+import fr.univ_lyon1.info.m1.poneymon_fx.controler.Controler;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.*;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.host.Host;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+import java.util.*;
+
+/**
+ * View for MenuMultiHost.
+ */
+public class MenuMultiHost {
+
+    /**
+     * Une String pour chaque personnage.
+     */
+    private String character1;
+
+    /**
+     * Une String pour la map.
+     */
+    private String map;
+
+    /**
+     * Booléen pour savoir si le joueur est prêt ou non.
+     */
+    private boolean isReady;
+
+    /**
+     * Nom du joueur.
+     */
+    private String name;
+
+    /**
+     * Liste contenant le personnage du joueur.
+     */
+<span class="nc" id="L51">    private List&lt;String&gt; listCharacters = new ArrayList&lt;String&gt;();</span>
+
+    /**
+     * Contenu de la TableView.
+     */
+<span class="nc" id="L56">    private final ObservableList&lt;Player&gt; data = FXCollections.observableArrayList();</span>
+
+    /**
+     * Host pour la partie réseau.
+     */
+    private Host host;
+
+    /**
+     * FieldModel.
+     */
+    FieldModel fieldModel;
+
+    /**
+     * Constructeur de la vue MenuSolo.
+     */
+<span class="nc" id="L71">    public MenuMultiHost(Host host, FieldModel fieldModel) {</span>
+
+<span class="nc" id="L73">        this.host = host;</span>
+<span class="nc" id="L74">        this.fieldModel = fieldModel;</span>
+<span class="nc" id="L75">        this.isReady = false;</span>
+        // Fenêtres
+<span class="nc" id="L77">        Stage stage = new Stage();</span>
+<span class="nc" id="L78">        stage.setTitle(&quot;Créer une partie&quot;);</span>
+
+<span class="nc" id="L80">        Stage stage1 = new Stage();</span>
+<span class="nc" id="L81">        stage1.setTitle(&quot;Liste des joueurs&quot;);</span>
+
+<span class="nc" id="L83">        GridPane grid = new GridPane();</span>
+<span class="nc" id="L84">        grid.setHgap(10);</span>
+<span class="nc" id="L85">        grid.setVgap(10);</span>
+<span class="nc" id="L86">        grid.setPadding(new Insets(25, 25, 25, 25));</span>
+
+
+        // Bouton quitter
+<span class="nc" id="L90">        Button buttonQuit = new Button(&quot;&lt;&lt;&quot;);</span>
+<span class="nc" id="L91">        buttonQuit.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L94">                MenuMulti mm = new MenuMulti();</span>
+<span class="nc" id="L95">                stage.close();</span>
+<span class="nc" id="L96">                stage1.close();</span>
+<span class="nc" id="L97">            }</span>
+        });
+<span class="nc" id="L99">        grid.add(buttonQuit, 0, 1);</span>
+
+        // Choix map
+<span class="nc" id="L102">        Label labelMap = new Label(&quot;Changer de map&quot;);</span>
+<span class="nc" id="L103">        grid.add(labelMap, 1, 1);</span>
+
+<span class="nc" id="L105">        ChoiceBox&lt;String&gt; choiceBoxMap = new ChoiceBox();</span>
+<span class="nc" id="L106">        choiceBoxMap.getItems().addAll(&quot;Map1&quot;, &quot;Map2&quot;, &quot;Map3&quot;, &quot;Map4&quot;);</span>
+<span class="nc" id="L107">        choiceBoxMap.getSelectionModel().select(0); // Default Value</span>
+<span class="nc" id="L108">        grid.add(choiceBoxMap, 2, 1);</span>
+        //Valeur par défaut
+<span class="nc" id="L110">        this.map = choiceBoxMap.getValue();</span>
+        // Listener
+<span class="nc" id="L112">        choiceBoxMap.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L113">                this.map = choiceBoxMap.getValue());</span>
+
+
+<span class="nc" id="L116">        Label labelName = new Label(&quot;Name&quot;);</span>
+<span class="nc" id="L117">        grid.add(labelName, 1, 3);</span>
+<span class="nc" id="L118">        TextField textFieldName = new TextField();</span>
+<span class="nc" id="L119">        grid.add(textFieldName, 2, 3);</span>
+        //Listener Name
+<span class="nc" id="L121">        textFieldName.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L122">            this.name = textFieldName.getText();</span>
+<span class="nc" id="L123">        });</span>
+        // Spinner Générique
+<span class="nc" id="L125">        SpinnerCharacter sc1 = new SpinnerCharacter();</span>
+
+<span class="nc" id="L127">        Spinner s1 = sc1.getSpinner();</span>
+
+
+        // Ajout sur la grille
+<span class="nc" id="L131">        Label labelSpinner = new Label(&quot;Personnage&quot;);</span>
+<span class="nc" id="L132">        grid.add(labelSpinner, 1, 4);</span>
+<span class="nc" id="L133">        grid.add(s1, 2, 4);</span>
+
+
+        // Valeurs par défaut
+<span class="nc" id="L137">        this.character1 = s1.getValue().toString();</span>
+
+
+        // Ajout des listeners
+<span class="nc" id="L141">        s1.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L142">                this.character1 = s1.getValue().toString());</span>
+
+
+        // Bouton jouer
+<span class="nc" id="L146">        Button buttonJouer = new Button(&quot;Jouer&quot;);</span>
+<span class="nc" id="L147">        buttonJouer.setDisable(true);</span>
+<span class="nc" id="L148">        buttonJouer.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+
+<span class="nc" id="L152">                Stage stage1 = new Stage();</span>
+<span class="nc" id="L153">                JfxView gameView = new JfxView(&quot;Poneymon 2.0 - Jeu&quot;, stage1);</span>
+
+<span class="nc" id="L155">                FieldView fieldView =</span>
+                        new FieldView(fieldModel, 600,600);
+<span class="nc" id="L157">                Controler controler = Controler.getControler();</span>
+<span class="nc" id="L158">                fieldView.setControler(controler);</span>
+<span class="nc" id="L159">                controler.addUpdateView(gameView);</span>
+<span class="nc" id="L160">                controler.setModel(fieldModel);</span>
+<span class="nc" id="L161">                gameView.setView(fieldView);</span>
+
+<span class="nc" id="L163">                Stage stage2 = new Stage();</span>
+<span class="nc" id="L164">                JfxView scoreView = new JfxView(&quot;Poneymon 2.0 - Score&quot;, stage2);</span>
+<span class="nc" id="L165">                scoreView.setView(new ScoreView(fieldModel, 600, 600));</span>
+<span class="nc" id="L166">                controler.addView(scoreView);</span>
+
+<span class="nc" id="L168">                controler.startTimer();</span>
+
+<span class="nc" id="L170">                stage.close();</span>
+
+<span class="nc" id="L172">            }</span>
+        });
+<span class="nc" id="L174">        grid.add(buttonJouer, 2, 10);</span>
+
+<span class="nc" id="L176">        Button buttonPret = new Button(&quot;Prêt&quot;);</span>
+<span class="nc" id="L177">        buttonPret.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+                CharacterModel poney;
+<span class="nc bnc" id="L181" title="All 2 branches missed.">                if (character1.equals(&quot;lama&quot;)) {</span>
+<span class="nc" id="L182">                    poney = new LamaModel(ColorEnum.GREEN,0,false, ModeEnum.HOST,null);</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">                } else if (character1.equals(&quot;pony&quot;)) {</span>
+<span class="nc" id="L184">                    poney = new PoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                } else if (character1.equals(&quot;aquapony&quot;)) {</span>
+<span class="nc" id="L186">                    poney = new AquaPoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                } else if (character1.equals(&quot;ghost&quot;)) {</span>
+<span class="nc" id="L188">                    poney = new GhostPoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+                } else {
+<span class="nc" id="L190">                    poney = new PoneyModel(ColorEnum.GREEN,0,false,ModeEnum.HOST,null);</span>
+                }
+<span class="nc" id="L192">                poney.setPseudo(name);</span>
+<span class="nc" id="L193">                host.getModel().setCharacter(poney,0);</span>
+<span class="nc" id="L194">                boolean ready = host.beginning();</span>
+<span class="nc" id="L195">                buttonPret.setDisable(ready);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                buttonJouer.setDisable(!ready);</span>
+<span class="nc" id="L197">            }</span>
+        });
+<span class="nc" id="L199">        grid.add(buttonPret, 1, 10);</span>
+
+        // Provisoire
+        //grid.setGridLinesVisible(true);
+
+        // Affichage fenêtre
+<span class="nc" id="L205">        Scene scene = new Scene(grid, 400, 300);</span>
+<span class="nc" id="L206">        stage.setScene(scene);</span>
+<span class="nc" id="L207">        stage.show();</span>
+
+        // --------- Création TableView ------
+
+<span class="nc" id="L211">        TableView&lt;String&gt; table = new TableView();</span>
+<span class="nc" id="L212">        table.setEditable(true);</span>
+
+        // Create column UserName (Data type of String).
+<span class="nc" id="L215">        TableColumn&lt;String, String&gt; userNameCol = new TableColumn&lt;&gt;(&quot;Username&quot;);</span>
+<span class="nc" id="L216">        userNameCol.setMinWidth(200);</span>
+<span class="nc" id="L217">        table.getColumns().addAll(userNameCol);</span>
+
+        // Refresher
+<span class="nc" id="L220">        new Timer().schedule(</span>
+<span class="nc" id="L221">                new TimerTask() {</span>
+
+                    @Override
+                    public void run() {
+<span class="nc" id="L225">                        Collection&lt;String&gt; list = host.getReadyPoney();</span>
+<span class="nc" id="L226">                        ObservableList&lt;String&gt; details = FXCollections.observableArrayList(list);</span>
+<span class="nc" id="L227">                        userNameCol.setCellValueFactory(data -&gt; new SimpleStringProperty(data.getValue()));</span>
+<span class="nc" id="L228">                        table.setItems(details);</span>
+<span class="nc" id="L229">                    }</span>
+                }, 5000, 2000);
+
+<span class="nc" id="L232">        StackPane root = new StackPane();</span>
+<span class="nc" id="L233">        root.setPadding(new Insets(5));</span>
+<span class="nc" id="L234">        root.getChildren().add(table);</span>
+
+
+<span class="nc" id="L237">        Scene scene1 = new Scene(root, 200, 300);</span>
+<span class="nc" id="L238">        stage1.setScene(scene1);</span>
+<span class="nc" id="L239">        stage1.show();</span>
+<span class="nc" id="L240">    }</span>
+
+    /**
+     * Méthode d'ajout dans la TableView.
+     */
+    public Player addPlayer(String username) {
+<span class="nc" id="L246">        Player player = new Player(username);</span>
+<span class="nc" id="L247">        return player;</span>
+    }
+
+    /**
+     * Méthode de passage en Ready.
+     */
+    public void setReady() {
+<span class="nc" id="L254">        this.isReady = true;</span>
+<span class="nc" id="L255">    }</span>
+
+    /**
+     * Getter de la liste des personnages.
+     * @return la liste des personnages
+     */
+    public String getListCharacters() {
+<span class="nc" id="L262">        return  this.character1;</span>
+    }
+
+    /**
+     * Getter de la map.
+     * @return String du nom de la map
+     */
+    public String getMap() {
+<span class="nc" id="L270">        return this.map;</span>
+    }
+
+    /**
+     * Getter nom du joueur.
+     * @return nom du joueur
+     */
+    public String getName() {
+<span class="nc" id="L278">        return this.name;</span>
+    }
+
+    /**
+     * Classe temporaire pour la table.
+     */
+    public static class Player {
+        private final String username;
+        private boolean isReady;
+
+        /**
+         * Constructeur d'un player.
+         * @param username nom du joueur
+         */
+<span class="nc" id="L292">        public Player(String username) {</span>
+<span class="nc" id="L293">            this.username = username;</span>
+<span class="nc" id="L294">            this.isReady = false;</span>
+<span class="nc" id="L295">        }</span>
+
+        /**
+         * Méthode de mise à jour du statut Ready dans la table pour un username.
+         */
+        public void isReady() {
+<span class="nc" id="L301">            this.isReady = true;</span>
+<span class="nc" id="L302">        }</span>
+
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

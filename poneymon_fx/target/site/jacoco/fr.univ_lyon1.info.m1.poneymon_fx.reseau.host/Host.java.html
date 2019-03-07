@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Host.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.reseau.host</a> &gt; <span class="el_source">Host.java</span></div><h1>Host.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.reseau.host;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.model.FieldModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.NetworkInterface;
+
+public class Host implements NetworkInterface {
+    private final int nombreJoueurs;
+    private HostConnect hc;
+    private FieldModel model;
+    private int port;
+
+    /**
+     * Cosntructeur de Host.
+     * @param fm modele.
+     * @param p  port de connection.
+     * @param nombreJoueurs nombre de clients attendus.
+     */
+<span class="fc" id="L18">    public Host(FieldModel fm, int p, int nombreJoueurs) {</span>
+<span class="fc" id="L19">        port = p;</span>
+<span class="fc" id="L20">        model = fm;</span>
+<span class="fc" id="L21">        this.nombreJoueurs = nombreJoueurs;</span>
+<span class="fc" id="L22">    }</span>
+
+    public void launch() {
+<span class="fc" id="L25">        hc = new HostConnect(port, model, nombreJoueurs);</span>
+<span class="fc" id="L26">        hc.start();</span>
+<span class="fc" id="L27">    }</span>
+
+    public boolean beginning() {
+<span class="nc" id="L30">        return hc.askBeginning();</span>
+    }
+
+    public HostConnect getHc() {
+<span class="fc" id="L34">        return hc;</span>
+    }
+
+    /**
+     * Envoie l'arret du mode hote.
+     */
+    public void setQuit() {
+<span class="nc" id="L41">        hc.setQuit();</span>
+<span class="nc" id="L42">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

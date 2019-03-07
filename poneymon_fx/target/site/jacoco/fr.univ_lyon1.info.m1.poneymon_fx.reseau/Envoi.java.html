@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Envoi.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.reseau</a> &gt; <span class="el_source">Envoi.java</span></div><h1>Envoi.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.reseau;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+public class Envoi {
+    protected Socket socket;
+    private Object message;
+
+<span class="fc" id="L14">    public Envoi(Socket s,Object o) {</span>
+<span class="fc" id="L15">        socket = s;</span>
+<span class="fc" id="L16">        message = o;</span>
+<span class="fc" id="L17">    }</span>
+
+    /**
+     * Envoie message via le socket (nécessite Reception).
+     */
+    public void run() throws IOException {
+<span class="fc" id="L23">        InputStream inp = null;</span>
+<span class="fc" id="L24">        BufferedReader brinp = null;</span>
+<span class="fc" id="L25">        ObjectOutputStream out = null;</span>
+        try {
+<span class="fc" id="L27">            inp = socket.getInputStream();</span>
+<span class="fc" id="L28">            brinp = new BufferedReader(new InputStreamReader(inp));</span>
+<span class="fc" id="L29">            out = new ObjectOutputStream(socket.getOutputStream());</span>
+<span class="nc" id="L30">        } catch (IOException e) {</span>
+<span class="nc" id="L31">            return;</span>
+<span class="fc" id="L32">        }</span>
+        String line;
+
+<span class="fc" id="L35">        line = brinp.readLine();</span>
+<span class="pc bpc" id="L36" title="2 of 4 branches missed.">        if ((line == null) || line.equalsIgnoreCase(&quot;QUIT&quot;)) {</span>
+<span class="nc" id="L37">            socket.close();</span>
+<span class="nc" id="L38">            return;</span>
+        } else {
+<span class="fc" id="L40">            out.writeObject(message);</span>
+<span class="fc" id="L41">            out.flush();</span>
+        }
+<span class="fc" id="L43">    }</span>
+
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

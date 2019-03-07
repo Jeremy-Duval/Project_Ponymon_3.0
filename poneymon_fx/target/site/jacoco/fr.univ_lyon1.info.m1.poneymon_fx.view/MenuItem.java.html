@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">MenuItem.java</span></div><h1>MenuItem.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
+/**
+ * Classe représentant un item dans le menu.
+ *
+ */
+public class MenuItem extends HBox {
+<span class="nc" id="L19">    static final Font FONT = Font.font(&quot;&quot;, FontWeight.BOLD, 30);</span>
+
+<span class="nc" id="L21">    private MiniPoney p1 = new MiniPoney(&quot;orange&quot;);</span>
+<span class="nc" id="L22">    private MiniPoney p2 = new MiniPoney(&quot;orange&quot;);</span>
+    private Text text;
+    private Runnable script;
+
+
+    private static class MiniPoney extends ImageView {
+        public MiniPoney(String color) {
+<span class="nc" id="L29">            super(new Image(&quot;assets/pony-&quot; + color + &quot;-powered.gif&quot;, 100, 0, true, true));</span>
+<span class="nc" id="L30">        }</span>
+    }
+
+    /**
+     * Constructeur du MenuItem.
+     * @param name texte affiché dans le MenuItem
+     */
+    public MenuItem(String name) {
+<span class="nc" id="L38">        super(15);</span>
+<span class="nc" id="L39">        setAlignment(Pos.CENTER);</span>
+
+<span class="nc" id="L41">        text = new Text(name);</span>
+<span class="nc" id="L42">        text.setFont(FONT);</span>
+<span class="nc" id="L43">        text.setEffect(new GaussianBlur(2));</span>
+
+<span class="nc" id="L45">        getChildren().addAll(p1, text, p2);</span>
+<span class="nc" id="L46">        setActive(false);</span>
+<span class="nc" id="L47">    }</span>
+
+    /**
+     * Donne un effet spécial à un item lorsqu'il a le focus.
+     * @param b booléan servant à activer ou désactiver l'effet
+     */
+    public void setActive(boolean b) {
+        //p1.setVisible(b);
+        //p2.setVisible(b);
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        text.setFill(b ? Color.WHITE : Color.GREY);</span>
+<span class="nc" id="L57">    }</span>
+
+    public void setOnActivate(Runnable r) {
+<span class="nc" id="L60">        script = r;</span>
+<span class="nc" id="L61">    }</span>
+
+    /**
+     * On appelle le script quand l'item est activé.
+     */
+    public void activate() {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (script != null) {</span>
+<span class="nc" id="L68">            script.run();</span>
+        }
+<span class="nc" id="L70">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

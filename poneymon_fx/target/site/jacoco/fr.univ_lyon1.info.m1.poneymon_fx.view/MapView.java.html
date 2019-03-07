@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">MapView.java</span></div><h1>MapView.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.App;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.CharacterModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.Map;
+import fr.univ_lyon1.info.m1.poneymon_fx.observer.UpdateObservable;
+import fr.univ_lyon1.info.m1.poneymon_fx.observer.UpdateObserver;
+import javafx.scene.canvas.GraphicsContext;
+
+/**
+ * View for the map.
+ *
+ * @author jeremy
+ */
+public class MapView implements View, UpdateObserver {
+
+    /**
+     * Largeur de la fenêtre.
+     */
+    private final int windowWidth;
+    /**
+     * Hauteur de la fenêtre.
+     */
+    private final int windowHeight;
+    /**
+     * Contexte graphique dans lequel on va afficher l'objet.
+     */
+    private GraphicsContext graphicsContext;
+    /**
+     * Modèle de la map à afficher.
+     */
+    private Map mapModel;
+    /**
+     * Tableau de vue pour afficher les objets de la map.
+     * [Ligne][Colonne].
+     */
+    private MapObjectView[][] map;
+    /**
+     * Tour actuel de chaque joueur.
+     */
+    private int[] currentLap;
+    /**
+     * Liste des personnages à observer.
+     */
+    private final CharacterModel[] characters;
+    
+    /**
+     * Constructeur de MapObjectView.
+     *
+     * @param gc      ContextGraphic dans lequel on va afficher l'objet
+     * @param width   largeur de la fenêtre (en pixel)
+     * @param height   hauteur de la fenêtre (en pixel)
+     * @param characters personnages (afin de mettre à jour la map quand ils changent de tour)
+     */
+<span class="nc" id="L55">    MapView(GraphicsContext gc, int width, int height, Map mapModel, CharacterModel[] characters) {</span>
+<span class="nc" id="L56">        this.windowWidth = width;</span>
+<span class="nc" id="L57">        this.windowHeight = height;</span>
+<span class="nc" id="L58">        this.characters = characters;</span>
+        
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (gc != null) {</span>
+<span class="nc" id="L61">            graphicsContext = gc;</span>
+        }
+        
+<span class="nc" id="L64">        this.setModel(mapModel);</span>
+        
+<span class="nc" id="L66">        this.updateMapContent();</span>
+<span class="nc" id="L67">    }</span>
+    
+    /**
+     * Attribut le modèle de données à prendre en charge.
+     *
+     * @param mapModel Modèle de map à gérer
+     */
+    private void setModel(Map mapModel) {
+<span class="nc" id="L75">        this.mapModel = mapModel;</span>
+<span class="nc" id="L76">        this.map = new MapObjectView[this.mapModel.getNbLine()][this.mapModel.getNbColumn()];</span>
+<span class="nc" id="L77">        this.currentLap = new int[this.mapModel.getNbLine()];</span>
+<span class="nc" id="L78">    }</span>
+    
+    /**
+     * Affichage de les objets de la map.
+     */
+    public void display() {
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        for (int i = 0; i &lt; mapModel.getNbLine(); ++i) {</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            for (int j = 0; j &lt; mapModel.getNbColumn(); ++j) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                if (this.map[i][j] != null) {</span>
+<span class="nc" id="L87">                    this.map[i][j].display();</span>
+                }
+            }
+        }
+        
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        for (int i = 0; i &lt; App.characterNumber; ++i) {</span>
+<span class="nc" id="L93">            final CharacterModel character = this.characters[i];</span>
+<span class="nc" id="L94">            character.addObserver(this);</span>
+<span class="nc" id="L95">            this.notifyUpdate(character);</span>
+        }
+<span class="nc" id="L97">    }</span>
+    
+    /**
+     * Met à jour le contenu de la map.
+     */
+    private void updateMapContent() {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        for (int i = 0; i &lt; this.mapModel.getNbLine(); ++i) {</span>
+<span class="nc" id="L104">            this.updateMapContent(i);</span>
+        }
+<span class="nc" id="L106">    }</span>
+    
+    /**
+     * Met à jour le contenu de la map pour la ligne indiqué.
+     */
+    private void updateMapContent(int line) {
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        for (int j = 0; j &lt; this.mapModel.getNbColumn(); ++j) {</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            if (this.mapModel.getObject(line, this.currentLap[line], j) != null) {</span>
+                // On divise la fenêtre en cases et on place l'objet sur une case
+                // Attribue à la view de l'objet son model (pour le tour courant)
+<span class="nc" id="L116">                this.map[line][j] = new MapObjectView(this.graphicsContext, </span>
+<span class="nc" id="L117">                        this.windowWidth / this.mapModel.getNbColumn() * j, </span>
+<span class="nc" id="L118">                        this.windowHeight / this.mapModel.getNbLine() * (line + 1), </span>
+<span class="nc" id="L119">                        this.mapModel.getObject(line, this.currentLap[line], j));</span>
+            } else {
+<span class="nc" id="L121">                this.map[line][j] = null;</span>
+            }
+        }
+<span class="nc" id="L124">    }</span>
+
+    /**
+     * Met à jour la map quand un personnage change de tour.
+     */
+    public void notifyUpdate(UpdateObservable observable) {
+<span class="nc" id="L130">        CharacterModel character = (CharacterModel) observable;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (this.currentLap[character.getRow()] &gt;= this.mapModel.getNbLap()) {</span>
+<span class="nc" id="L132">            this.currentLap[character.getRow()] = 0;</span>
+        } else {
+<span class="nc" id="L134">            this.currentLap[character.getRow()] = character.getCurrentLap();</span>
+        }
+<span class="nc" id="L136">        this.updateMapContent(character.getRow());</span>
+<span class="nc" id="L137">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

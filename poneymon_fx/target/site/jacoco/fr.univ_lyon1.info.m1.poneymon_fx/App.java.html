@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.controler.Controler;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.AquaPoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.FieldModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.GhostPoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.LamaModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ModeEnum;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.PoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.view.FieldView;
+import fr.univ_lyon1.info.m1.poneymon_fx.view.JfxView;
+import fr.univ_lyon1.info.m1.poneymon_fx.view.ScoreView;
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+/**
+ * Classe principale de l'application.
+ *
+ * s'appuie sur javafx pour le rendu
+ */
+<span class="nc" id="L21">public class App extends Application {</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L24">        Application.launch(args);</span>
+<span class="nc" id="L25">    }</span>
+
+    /**
+     * Nombre de personnages dans le jeu.
+     */
+    public static final int characterNumber = 5;
+    /**
+     * Nombre de personnages contrôlés par des joueurs dans le jeu.
+     */
+    public static final int playerNumber = App.characterNumber &gt;&gt; 1;
+
+    /**
+     * En javafx start() lance l'application.
+     *
+     * On cree le SceneGraph de l'application ici
+     *
+     * @see &lt;a
+     * href=&quot;http://docs.oracle.com/javafx/2/scenegraph/jfxpub-scenegraph.htm&quot;&gt;jfxpub-scenegraph.htm&lt;/a&gt;
+     */
+    @Override
+    public void start(Stage stage) {
+        
+<span class="nc" id="L47">        Class[] cl = new Class[App.characterNumber];</span>
+<span class="nc" id="L48">        cl[0] = AquaPoneyModel.class;</span>
+<span class="nc" id="L49">        cl[1] = GhostPoneyModel.class;</span>
+<span class="nc" id="L50">        cl[2] = LamaModel.class;</span>
+<span class="nc" id="L51">        cl[3] = PoneyModel.class;</span>
+<span class="nc" id="L52">        cl[4] = PoneyModel.class;</span>
+        
+<span class="nc" id="L54">        JfxView gameView = new JfxView(&quot;Poneymon 2.0 - Jeu&quot;, stage);</span>
+        
+<span class="nc" id="L56">        FieldModel fieldModel </span>
+                = new FieldModel(cl, App.characterNumber - App.playerNumber, 
+                        &quot;jump&quot;, ModeEnum.LOCAL, null);
+        
+<span class="nc" id="L60">        int height = 600;</span>
+<span class="nc" id="L61">        int width = 600;</span>
+        
+<span class="nc" id="L63">        FieldView fieldView = new FieldView(fieldModel, width, height);</span>
+
+<span class="nc" id="L65">        Controler controler = Controler.getControler();</span>
+<span class="nc" id="L66">        fieldView.setControler(controler);</span>
+<span class="nc" id="L67">        controler.addUpdateView(gameView);</span>
+<span class="nc" id="L68">        controler.setModel(fieldModel);</span>
+<span class="nc" id="L69">        gameView.setView(fieldView);</span>
+
+<span class="nc" id="L71">        Stage stage2 = new Stage();</span>
+<span class="nc" id="L72">        JfxView scoreView = new JfxView(&quot;Poneymon 2.0 - Score&quot;, stage2);</span>
+<span class="nc" id="L73">        scoreView.setView(new ScoreView(fieldModel, width, height));</span>
+<span class="nc" id="L74">        controler.addView(scoreView);</span>
+
+<span class="nc" id="L76">        controler.startTimer();</span>
+<span class="nc" id="L77">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

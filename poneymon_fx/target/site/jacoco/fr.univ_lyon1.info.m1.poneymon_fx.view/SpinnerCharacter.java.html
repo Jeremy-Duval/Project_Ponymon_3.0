@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpinnerCharacter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">SpinnerCharacter.java</span></div><h1>SpinnerCharacter.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Spinner character choice for solo and multi players games.
+ */
+public class SpinnerCharacter {
+
+    /**
+     * Le spinner retourné par la vue.
+     */
+<span class="nc" id="L17">    final Spinner&lt;String&gt; spinnerCharacter = new Spinner&lt;String&gt;();</span>
+    /**
+     * La liste des personnages possibles.
+     */
+<span class="nc" id="L21">    private List&lt;String&gt; poneys = new ArrayList&lt;String&gt;();</span>
+
+    /**
+     * Constructeur d'un Spinner.
+     */
+<span class="nc" id="L26">    public SpinnerCharacter() {</span>
+<span class="nc" id="L27">        String lama = &quot;lama&quot;;</span>
+<span class="nc" id="L28">        String pony = &quot;pony&quot;;</span>
+<span class="nc" id="L29">        String aquapony = &quot;aquapony&quot;;</span>
+<span class="nc" id="L30">        String ghostpony = &quot;ghostpony&quot;;</span>
+
+<span class="nc" id="L32">        poneys.add(lama);</span>
+<span class="nc" id="L33">        poneys.add(pony);</span>
+<span class="nc" id="L34">        poneys.add(aquapony);</span>
+<span class="nc" id="L35">        poneys.add(ghostpony);</span>
+
+
+        // Value factory.
+<span class="nc" id="L39">        SpinnerValueFactory&lt;String&gt; valueFactory = //</span>
+<span class="nc" id="L40">            new SpinnerValueFactory&lt;String&gt;() {</span>
+
+                @Override
+                public void decrement(int steps) {
+<span class="nc" id="L44">                    String current = this.getValue();</span>
+<span class="nc" id="L45">                    int idx = poneys.indexOf(current);</span>
+<span class="nc" id="L46">                    int newIdx = (poneys.size() + idx - steps) % poneys.size();</span>
+<span class="nc" id="L47">                    String newImg = poneys.get(newIdx);</span>
+<span class="nc" id="L48">                    this.setValue(newImg);</span>
+<span class="nc" id="L49">                }</span>
+
+                @Override
+                public void increment(int steps) {
+<span class="nc" id="L53">                    String current = this.getValue();</span>
+<span class="nc" id="L54">                    int idx = poneys.indexOf(current);</span>
+<span class="nc" id="L55">                    int newIdx = (idx + steps) % poneys.size();</span>
+<span class="nc" id="L56">                    String newImg = poneys.get(newIdx);</span>
+<span class="nc" id="L57">                    this.setValue(newImg);</span>
+<span class="nc" id="L58">                }</span>
+
+        };
+
+        // Default value for Spinner
+<span class="nc" id="L63">        valueFactory.setValue(lama);</span>
+
+<span class="nc" id="L65">        this.spinnerCharacter.setValueFactory(valueFactory);</span>
+
+
+<span class="nc" id="L68">    }</span>
+
+    /**
+     * Getter du spinner.
+     * @return le spinner en question
+     */
+    public Spinner&lt;String&gt; getSpinner() {
+<span class="nc" id="L75">        return this.spinnerCharacter;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

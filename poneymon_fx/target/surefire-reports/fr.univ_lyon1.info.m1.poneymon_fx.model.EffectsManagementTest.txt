@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: fr.univ_lyon1.info.m1.poneymon_fx.model.EffectsManagementTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 sec - in fr.univ_lyon1.info.m1.poneymon_fx.model.EffectsManagementTest

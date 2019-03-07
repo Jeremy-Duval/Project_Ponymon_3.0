@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FieldModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.model</a> &gt; <span class="el_source">FieldModel.java</span></div><h1>FieldModel.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.model;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.App;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.NetworkInterface;
+
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Class contain data for the field.
+ *
+ * @author jeremy
+ */
+public class FieldModel implements Serializable {
+    /**
+     * Liste des personnages présents dans la course.
+     */
+    private CharacterModel[] characters;
+    /**
+     * Nombre de tours à courir au total.
+     */
+<span class="fc" id="L25">    private int nbLapToRun = 15;</span>
+    /**
+     * Gagnant de la course, null tant que la course n'est pas terminée.
+     */
+    private CharacterModel winner;
+    /**
+     * Modèle de la map à afficher.
+     */
+    private Map mapModel;
+
+    private ModeEnum mode; //TODO: setup
+
+    private NetworkInterface net;
+
+    /**
+     * Constructeur de FieldModel.
+     * @param charClass classe des personnages à créer (ex : PoneyModel.class)
+     * @param nbAi nombre d'IA
+     */
+    public FieldModel(Class[] charClass, int nbAi, String mapName, 
+<span class="fc" id="L45">            ModeEnum mode, NetworkInterface net) {</span>
+        Constructor cons;
+        
+<span class="fc" id="L48">        this.mode = mode;</span>
+<span class="fc" id="L49">        this.net = net;</span>
+        
+<span class="fc" id="L51">        this.characters = new CharacterModel[App.characterNumber];</span>
+        /* On initialise le terrain de course */
+<span class="fc" id="L53">        ColorEnum[] colorMap = {ColorEnum.BLUE, ColorEnum.GREEN,</span>
+            ColorEnum.ORANGE, ColorEnum.PURPLE, ColorEnum.YELLOW};
+        
+        // on créer chaque personnage en utilisant la reflexivité.
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (int i = 0; i &lt; App.characterNumber; ++i) {</span>
+            try {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (i &lt; nbAi) {</span>
+<span class="fc" id="L60">                    cons = charClass[i].getConstructor(ColorEnum.class, Integer.TYPE, </span>
+                            ModeEnum.class, NetworkInterface.class);
+                } else {
+<span class="fc" id="L63">                    cons = charClass[i].getConstructor(ColorEnum.class, Integer.TYPE, Boolean.TYPE, </span>
+                            ModeEnum.class, NetworkInterface.class);
+                }
+                try {
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                    if (i &lt; nbAi) {</span>
+<span class="fc" id="L68">                        this.characters[i] = (CharacterModel) cons</span>
+<span class="fc" id="L69">                                .newInstance(colorMap[i], i, mode, net);</span>
+                    } else {
+<span class="fc" id="L71">                        this.characters[i] = (CharacterModel) cons</span>
+<span class="fc" id="L72">                                .newInstance(colorMap[i], i, true, mode, net);</span>
+                    }
+                    
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                    if (i &gt; 0) {</span>
+<span class="fc" id="L76">                        this.characters[i].addNeighbor(this.characters[i - 1]);</span>
+<span class="fc" id="L77">                        this.characters[i - 1].addNeighbor(this.characters[i]);</span>
+                    }
+<span class="nc" id="L79">                } catch (InstantiationException ex) {</span>
+<span class="nc" id="L80">                    Logger.getLogger(FieldModel.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L81">                } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L82">                    Logger.getLogger(FieldModel.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L83">                } catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L84">                    Logger.getLogger(FieldModel.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L85">                } catch (InvocationTargetException ex) {</span>
+<span class="nc" id="L86">                    Logger.getLogger(FieldModel.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="pc" id="L87">                }</span>
+<span class="nc" id="L88">            } catch (NoSuchMethodException ex) {</span>
+<span class="nc" id="L89">                Logger.getLogger(FieldModel.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L90">            } catch (SecurityException ex) {</span>
+<span class="nc" id="L91">                Logger.getLogger(FieldModel.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="pc" id="L92">            }</span>
+        }
+        
+        /*this.characters[0] = new LamaModel(colorMap[0], 0, new LongerJump());
+        for (int i = 1; i &lt; App.characterNumber; ++i) {
+            if (i &lt; App.playerNumber) {
+                this.characters[i] = new PoneyModel(colorMap[i], i, new NormalJump());
+            } else {
+                this.characters[i] = new PoneyModel(colorMap[i], i, new NormalJump(), true);
+            }
+            if (i &gt; 0) {
+                this.characters[i].addNeighbor(this.characters[i - 1]);
+                this.characters[i - 1].addNeighbor(this.characters[i]);
+            }
+        }*/
+        
+<span class="fc" id="L108">        this.mapModel = Map.load(mapName);</span>
+<span class="fc" id="L109">    }</span>
+
+    public CharacterModel[] getCharacters() {
+<span class="fc" id="L112">        return characters;</span>
+    }
+
+    public int getNbLapToRun() {
+<span class="fc" id="L116">        return nbLapToRun;</span>
+    }
+
+    public Map getMapModel() {
+<span class="nc" id="L120">        return mapModel;</span>
+    }
+
+    /**
+     * Cherche si un gagnant dans les characters.
+     */
+    private void searchWinner() {
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        for (CharacterModel characterModel : this.characters) {</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">            if (characterModel.getCurrentLap() &gt;= nbLapToRun) {</span>
+<span class="fc" id="L129">                this.winner = characterModel;</span>
+<span class="fc" id="L130">                return;</span>
+            }
+        }
+<span class="fc" id="L133">    }</span>
+
+    /**
+     * Cherche le gagnant si il n'y en a pas encore de défini.
+     *
+     * @return Personnage gagnant de la course si la course est terminée ou null
+     */
+    public CharacterModel getWinner() {
+<span class="fc" id="L141">        return winner;</span>
+    }
+
+    /**
+     * Fais évoluer les données du modèle et celles de ces enfants.
+     *
+     * @return True si les données du modèle ont été modifiées (ou d'un enfant)
+     */
+    public boolean update() {
+<span class="fc" id="L150">        boolean updated = false;</span>
+<span class="pc bpc" id="L151" title="3 of 4 branches missed.">        if (mode == ModeEnum.LOCAL || mode == ModeEnum.HOST) {</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            for (CharacterModel model : this.characters) {</span>
+<span class="fc" id="L153">                this.updatePersoVision(model);</span>
+                // On a pas le choix sur le sens de cette instruction car si un
+                // personnage a déjà bougé durant ce tour updated sera à true et
+                // l'opérateur ignorera l'instruction à droite
+<span class="fc bfc" id="L157" title="All 2 branches covered.">                if (model.getCurrentLap() != this.nbLapToRun) {</span>
+<span class="fc" id="L158">                    this.mapModel.detectCollision(model);</span>
+                }
+<span class="pc bpc" id="L160" title="3 of 4 branches missed.">                updated = model.update() || updated;</span>
+                
+            }
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">            if (this.winner == null) {</span>
+<span class="fc" id="L164">                this.searchWinner();</span>
+            }
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        } else if (mode == ModeEnum.CUSTOMER) {</span>
+            //Le modèle est mis à jour par la partie réseau en mode client.
+<span class="nc" id="L168">            updated = true;</span>
+        }
+<span class="fc" id="L170">        return updated;</span>
+    }
+
+    /**
+     * Copie partielle de field modèle.
+     */
+    public void lightCopy(FieldModel fieldModel) {
+<span class="nc" id="L177">        characters = fieldModel.getCharacters();</span>
+<span class="nc" id="L178">        nbLapToRun = fieldModel.getNbLapToRun();</span>
+<span class="nc" id="L179">        winner = fieldModel.getWinner();</span>
+<span class="nc" id="L180">    }</span>
+
+    public void setCharacter(CharacterModel chara, int row) {
+<span class="fc" id="L183">        characters[row] = chara;</span>
+<span class="fc" id="L184">    }</span>
+
+    public void setWinner(CharacterModel winner) {
+<span class="fc" id="L187">        this.winner = winner;</span>
+<span class="fc" id="L188">    }</span>
+
+    /**
+     * Fais une mise a jour partielle de ses personnages avec le fieldModel donné en paramètre.
+     */
+    public void updateCharacters(FieldModel model) {
+<span class="nc bnc" id="L194" title="All 4 branches missed.">        for (int i = 0; i &lt; characters.length &amp;&amp; i &lt; model.getCharacters().length; i++) {</span>
+<span class="nc bnc" id="L195" title="All 4 branches missed.">            if (characters[i] != null &amp;&amp; model.getCharacters()[i] != null) {</span>
+<span class="nc" id="L196">                this.characters[i].updateChar(model.getCharacters()[0]);</span>
+            }
+        }
+<span class="nc" id="L199">    }</span>
+    
+    /**
+     * Met à jour la vision du perso.
+     * @param model personnage
+     */
+    private void updatePersoVision(CharacterModel model) {
+        int colonneNextObj;
+        // on recupère la colonne (de la map) sur lequel se trouve le prochain objet.
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (model.getCurrentLap() &lt; this.mapModel.getNbLap()) {</span>
+<span class="fc" id="L209">            colonneNextObj = this.mapModel</span>
+<span class="fc" id="L210">                    .getNextObjectColumn(model.getRow(), </span>
+<span class="fc" id="L211">                            model.getCurrentLap(), model.getProgress());</span>
+        } else {
+<span class="fc" id="L213">            colonneNextObj = -1;</span>
+        }
+        // on met à jour la vision
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (colonneNextObj &gt;= 0) {</span>
+<span class="fc" id="L217">            model.updateVision(this.mapModel</span>
+<span class="fc" id="L218">                    .getObject(model.getRow(), model.getCurrentLap(), colonneNextObj),</span>
+<span class="fc" id="L219">                    colonneNextObj * (1.0 / this.mapModel.getNbColumn()));</span>
+        } else {
+<span class="fc" id="L221">            model.updateVision(null, 1);</span>
+        }
+<span class="fc" id="L223">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuMulti.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">MenuMulti.java</span></div><h1>MenuMulti.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.App;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.FieldModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.controler.Controler;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ModeEnum;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.PoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.customer.Customer;
+import fr.univ_lyon1.info.m1.poneymon_fx.reseau.host.Host;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Insets;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+/**
+ * Menu Principal qui apparait au lancement.
+ */
+public class MenuMulti {
+
+    /**
+     * Port de la partie.
+     */
+    private String port;
+
+    /**
+     * Adresse de la partie.
+     */
+    private String adresse;
+
+    /**
+     * Nombre d'IA.
+     */
+    private int nbIa;
+
+    /**
+     * Constructeur de la View MenuMulti.
+     */
+<span class="nc" id="L44">    public MenuMulti() {</span>
+
+<span class="nc" id="L46">        Stage stage = new Stage();</span>
+        // Nom de la fenetre
+<span class="nc" id="L48">        stage.setTitle(&quot;Multiplayers&quot;);</span>
+
+<span class="nc" id="L50">        GridPane grid = new GridPane();</span>
+<span class="nc" id="L51">        grid.setHgap(10);</span>
+<span class="nc" id="L52">        grid.setVgap(10);</span>
+<span class="nc" id="L53">        grid.setPadding(new Insets(25, 25, 25, 25));</span>
+
+
+        // Bouton quitter
+<span class="nc" id="L57">        Button buttonQuit = new Button(&quot;&lt;&lt;&quot;);</span>
+<span class="nc" id="L58">        buttonQuit.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L61">                MenuPrincipalView mpv = new MenuPrincipalView();</span>
+<span class="nc" id="L62">                stage.close();</span>
+<span class="nc" id="L63">            }</span>
+        });
+<span class="nc" id="L65">        grid.add(buttonQuit, 0, 1);</span>
+
+        // Port
+<span class="nc" id="L68">        Label labelPort = new Label(&quot;Port&quot;);</span>
+<span class="nc" id="L69">        grid.add(labelPort, 0, 2);</span>
+<span class="nc" id="L70">        TextField textFieldPort = new TextField();</span>
+<span class="nc" id="L71">        grid.add(textFieldPort, 1, 2);</span>
+
+        //Adresse
+<span class="nc" id="L74">        Label labelAdresse = new Label(&quot;Adresse&quot;);</span>
+<span class="nc" id="L75">        labelAdresse.setMinSize(60, 10);</span>
+<span class="nc" id="L76">        grid.add(labelAdresse, 0, 3);</span>
+<span class="nc" id="L77">        TextField textFieldAdresse = new TextField();</span>
+<span class="nc" id="L78">        grid.add(textFieldAdresse, 1, 3);</span>
+
+        // Spinner IA
+<span class="nc" id="L81">        Label labelia = new Label(&quot;Nombre d'IA&quot;);</span>
+<span class="nc" id="L82">        grid.add(labelia, 0, 4);</span>
+<span class="nc" id="L83">        final Spinner&lt;Integer&gt; spinneria = new Spinner&lt;Integer&gt;();</span>
+<span class="nc" id="L84">        final int initialValueSpinnerIa = 3;</span>
+        // Value factory.
+<span class="nc" id="L86">        SpinnerValueFactory&lt;Integer&gt; valueFactoryIa = //</span>
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, initialValueSpinnerIa);
+
+<span class="nc" id="L89">        spinneria.setValueFactory(valueFactoryIa);</span>
+<span class="nc" id="L90">        grid.add(spinneria, 1, 4);</span>
+        // Valeur par défaut
+<span class="nc" id="L92">        this.nbIa = spinneria.getValue();</span>
+
+<span class="nc" id="L94">        Button buttonHost = new Button(&quot;Host&quot;);</span>
+<span class="nc" id="L95">        buttonHost.setDisable(true);</span>
+<span class="nc" id="L96">        buttonHost.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L99">                Class[] cl = new Class[App.characterNumber];</span>
+
+<span class="nc bnc" id="L101" title="All 2 branches missed.">                for(int i = 0; i&lt;App.characterNumber; i++) {</span>
+<span class="nc" id="L102">                    cl[i] = PoneyModel.class;</span>
+                }
+
+<span class="nc" id="L105">                FieldModel fieldModel = new FieldModel(cl, getNbIa(),</span>
+                        &quot;jump&quot;, ModeEnum.HOST, null);
+                // -1 car on ne compte pas l'hôte
+<span class="nc" id="L108">                Host host = new Host(fieldModel, Integer.parseInt(getPort()), App.characterNumber - getNbIa() - 1);</span>
+<span class="nc" id="L109">                fieldModel.setNet(host);</span>
+<span class="nc" id="L110">                MenuMultiHost mm = new MenuMultiHost(host, fieldModel);</span>
+<span class="nc" id="L111">                host.launch();</span>
+<span class="nc" id="L112">                stage.close();</span>
+<span class="nc" id="L113">            }</span>
+        });
+<span class="nc" id="L115">        buttonHost.setMinSize(200, 50);</span>
+<span class="nc" id="L116">        grid.add(buttonHost, 1, 5);</span>
+
+<span class="nc" id="L118">        Button buttonLocal = new Button(&quot;Client&quot;);</span>
+<span class="nc" id="L119">        buttonLocal.setDisable(true);</span>
+<span class="nc" id="L120">        buttonLocal.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L123">                Class[] cl = new Class[App.characterNumber];</span>
+
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                for(int i = 0; i&lt;App.characterNumber; i++) {</span>
+<span class="nc" id="L126">                    cl[i] = PoneyModel.class;</span>
+                }
+
+
+<span class="nc" id="L130">                FieldModel fieldModel = new FieldModel(cl, getNbIa(),</span>
+                        &quot;jump&quot;, ModeEnum.CUSTOMER, null);
+
+<span class="nc" id="L133">                Customer customer = null;</span>
+                try {
+<span class="nc" id="L135">                    customer = new Customer(InetAddress.getByName(getAdresse()), Integer.parseInt(getPort()), fieldModel);</span>
+<span class="nc" id="L136">                    fieldModel.setNet(customer);</span>
+<span class="nc" id="L137">                    MenuMultiClient ms = new MenuMultiClient(customer, fieldModel);</span>
+<span class="nc" id="L138">                    customer.launch();</span>
+<span class="nc" id="L139">                } catch (UnknownHostException e1) {</span>
+<span class="nc" id="L140">                    e1.printStackTrace();</span>
+<span class="nc" id="L141">                }</span>
+
+
+<span class="nc" id="L144">                stage.close();</span>
+<span class="nc" id="L145">            }</span>
+        });
+<span class="nc" id="L147">        buttonLocal.setMinSize(200, 50);</span>
+<span class="nc" id="L148">        grid.add(buttonLocal, 1, 6);</span>
+
+        // Lister port
+<span class="nc" id="L151">        textFieldPort.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L152">            this.port = textFieldPort.getText();</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if(!textFieldPort.getText().trim().isEmpty()) {</span>
+<span class="nc" id="L154">                buttonHost.setDisable(false);</span>
+            }
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if(textFieldPort.getText().trim().isEmpty()) {</span>
+<span class="nc" id="L157">                buttonHost.setDisable(true);</span>
+            }
+<span class="nc bnc" id="L159" title="All 4 branches missed.">            if(!textFieldAdresse.getText().trim().isEmpty() &amp;&amp; !textFieldPort.getText().trim().isEmpty()) {</span>
+<span class="nc" id="L160">                buttonLocal.setDisable(false);</span>
+            }
+<span class="nc bnc" id="L162" title="All 4 branches missed.">            if(textFieldAdresse.getText().trim().isEmpty() || textFieldPort.getText().trim().isEmpty()) {</span>
+<span class="nc" id="L163">                buttonLocal.setDisable(true);</span>
+            }
+<span class="nc" id="L165">        });</span>
+
+        //Listener Adresse
+<span class="nc" id="L168">        textFieldAdresse.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L169">            this.adresse = textFieldAdresse.getText();</span>
+<span class="nc bnc" id="L170" title="All 4 branches missed.">            if(!textFieldAdresse.getText().trim().isEmpty() &amp;&amp; !textFieldPort.getText().trim().isEmpty()) {</span>
+<span class="nc" id="L171">                buttonLocal.setDisable(false);</span>
+            }
+
+<span class="nc bnc" id="L174" title="All 4 branches missed.">            if(textFieldAdresse.getText().trim().isEmpty() || textFieldPort.getText().trim().isEmpty()) {</span>
+<span class="nc" id="L175">                buttonLocal.setDisable(true);</span>
+            }
+<span class="nc" id="L177">        });</span>
+<span class="nc" id="L178">        Scene scene = new Scene(grid, 330, 320);</span>
+<span class="nc" id="L179">        stage.setScene(scene);</span>
+<span class="nc" id="L180">        stage.show();</span>
+<span class="nc" id="L181">    }</span>
+
+    /**
+     * Getter du port.
+     * @return le port.
+     */
+    public String getPort() {
+<span class="nc" id="L188">        return this.port;</span>
+    }
+
+    /**
+     * Getter de l'adresse.
+     * @return l'adresse de la partie.
+     */
+    public String getAdresse() {
+<span class="nc" id="L196">        return this.adresse;</span>
+    }
+
+    /**
+     * Getter du nombre d'IA.
+     * @return nombre d'IA dans la partie
+     */
+    public int getNbIa() {
+<span class="nc" id="L204">        return this.nbIa;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

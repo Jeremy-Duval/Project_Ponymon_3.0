@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuLocal.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poneymon_fx</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.poneymon_fx.view</a> &gt; <span class="el_source">MenuLocal.java</span></div><h1>MenuLocal.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.poneymon_fx.view;
+
+import fr.univ_lyon1.info.m1.poneymon_fx.App;
+import fr.univ_lyon1.info.m1.poneymon_fx.controler.Controler;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.AquaPoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.GhostPoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.LamaModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.PoneyModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.FieldModel;
+import fr.univ_lyon1.info.m1.poneymon_fx.model.ModeEnum;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * View for MenuLocal.
+ */
+public class MenuLocal {
+
+    /**
+     * Une String pour chaque personnage.
+     */
+    private String character1;
+    private String character2;
+    private String character3;
+    private String character4;
+    private String character5;
+
+    /**
+     * Une String pour la map.
+     */
+    private String map;
+
+    /**
+     * Nombre d'IA.
+     */
+    private int nbIa;
+
+    /**
+     * La liste des joueurs.
+     * Par exemple : pony-blue, pony-green, lama, pony-orange, pony-orange.
+     */
+<span class="nc" id="L55">    private List&lt;String&gt; listCharacters = new ArrayList&lt;String&gt;();</span>
+
+    /**
+     * Constructeur de la vue MenuSolo.
+     */
+<span class="nc" id="L60">    public MenuLocal() {</span>
+        // Fenêtre
+<span class="nc" id="L62">        Stage stage = new Stage();</span>
+<span class="nc" id="L63">        stage.setTitle(&quot;Partie solo&quot;);</span>
+
+<span class="nc" id="L65">        GridPane grid = new GridPane();</span>
+<span class="nc" id="L66">        grid.setHgap(10);</span>
+<span class="nc" id="L67">        grid.setVgap(10);</span>
+<span class="nc" id="L68">        grid.setPadding(new Insets(25, 25, 25, 25));</span>
+
+        // Button Quit
+
+        // Bouton quitter
+<span class="nc" id="L73">        Button buttonQuit = new Button(&quot;&lt;&lt;&quot;);</span>
+<span class="nc" id="L74">        buttonQuit.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L77">                MenuPrincipalView mpv = new MenuPrincipalView();</span>
+<span class="nc" id="L78">                stage.close();</span>
+<span class="nc" id="L79">            }</span>
+        });
+<span class="nc" id="L81">        grid.add(buttonQuit, 0, 1);</span>
+
+        // Spinner IA
+        /**
+         * Ici, nombre d'IA est devenu nomre de joueurs suite à un problème de lien avec la partie Map du projet
+         */
+<span class="nc" id="L87">        Label labelia = new Label(&quot;Nombre de joueurs &quot;);</span>
+<span class="nc" id="L88">        grid.add(labelia, 0, 3);</span>
+<span class="nc" id="L89">        final Spinner&lt;Integer&gt; spinneria = new Spinner&lt;Integer&gt;();</span>
+<span class="nc" id="L90">        final int initialValueSpinnerIa = 0;</span>
+        // Value factory.
+<span class="nc" id="L92">        SpinnerValueFactory&lt;Integer&gt; valueFactoryIa = //</span>
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, initialValueSpinnerIa);
+
+<span class="nc" id="L95">        spinneria.setValueFactory(valueFactoryIa);</span>
+<span class="nc" id="L96">        grid.add(spinneria, 1, 3);</span>
+        // Valeur par défaut
+<span class="nc" id="L98">        this.nbIa = spinneria.getValue();</span>
+
+<span class="nc" id="L100">        Label labelMap = new Label(&quot;Changer de map&quot;);</span>
+<span class="nc" id="L101">        grid.add(labelMap, 3, 3);</span>
+
+<span class="nc" id="L103">        ChoiceBox&lt;String&gt; choiceBoxMap = new ChoiceBox();</span>
+<span class="nc" id="L104">        choiceBoxMap.getItems().addAll(&quot;aquaLand&quot;, &quot;boosted&quot;, &quot;empty&quot;, &quot;jump&quot;, &quot;pikou&quot;);</span>
+<span class="nc" id="L105">        choiceBoxMap.getSelectionModel().select(0); // Default Value</span>
+<span class="nc" id="L106">        grid.add(choiceBoxMap, 4, 3);</span>
+        //Valeur par défaut
+<span class="nc" id="L108">        this.map = choiceBoxMap.getValue();</span>
+        // Listener
+<span class="nc" id="L110">        choiceBoxMap.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L111">                this.map = choiceBoxMap.getValue());</span>
+
+        // Spinners Characters
+
+        // Labels
+<span class="nc" id="L116">        Label labelIa1 = new Label(&quot;&quot;);</span>
+<span class="nc" id="L117">        Label labelIa2 = new Label(&quot;&quot;);</span>
+<span class="nc" id="L118">        Label labelIa3 = new Label(&quot;&quot;);</span>
+<span class="nc" id="L119">        Label labelIa4 = new Label(&quot;&quot;);</span>
+<span class="nc" id="L120">        Label labelIa5 = new Label(&quot;&quot;);</span>
+
+        // Liste des labels IA pour listeners
+<span class="nc" id="L123">        List&lt;Label&gt; labelsIa = new ArrayList&lt;Label&gt;();</span>
+<span class="nc" id="L124">        labelsIa.add(labelIa1);</span>
+<span class="nc" id="L125">        labelsIa.add(labelIa2);</span>
+<span class="nc" id="L126">        labelsIa.add(labelIa3);</span>
+<span class="nc" id="L127">        labelsIa.add(labelIa4);</span>
+<span class="nc" id="L128">        labelsIa.add(labelIa5);</span>
+
+        // Ajout sur la grille
+<span class="nc" id="L131">        grid.add(labelIa1, 0, 5);</span>
+<span class="nc" id="L132">        grid.add(labelIa2, 1, 5);</span>
+<span class="nc" id="L133">        grid.add(labelIa3, 2, 5);</span>
+<span class="nc" id="L134">        grid.add(labelIa4, 3, 5);</span>
+<span class="nc" id="L135">        grid.add(labelIa5, 4, 5);</span>
+
+        // Listener spinner IA
+<span class="nc" id="L138">        spinneria.valueProperty().addListener((obs, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L139">            this.nbIa = spinneria.getValue();</span>
+            int i;
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            for (i = 0; i &lt; nbIa; i++) {</span>
+<span class="nc" id="L142">                labelsIa.get(i).setText(&quot;Joueur&quot;);</span>
+            }
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            for (int j = i; j &lt; labelsIa.size(); j++) {</span>
+<span class="nc" id="L145">                labelsIa.get(i).setText(&quot;&quot;);</span>
+            }
+<span class="nc" id="L147">        });</span>
+
+        // Spinner Générique
+<span class="nc" id="L150">        SpinnerCharacter sc1 = new SpinnerCharacter();</span>
+<span class="nc" id="L151">        SpinnerCharacter sc2 = new SpinnerCharacter();</span>
+<span class="nc" id="L152">        SpinnerCharacter sc3 = new SpinnerCharacter();</span>
+<span class="nc" id="L153">        SpinnerCharacter sc4 = new SpinnerCharacter();</span>
+<span class="nc" id="L154">        SpinnerCharacter sc5 = new SpinnerCharacter();</span>
+
+        // 5 copies du générique
+<span class="nc" id="L157">        Spinner s1 = sc1.getSpinner();</span>
+<span class="nc" id="L158">        Spinner s2 = sc2.getSpinner();</span>
+<span class="nc" id="L159">        Spinner s3 = sc3.getSpinner();</span>
+<span class="nc" id="L160">        Spinner s4 = sc4.getSpinner();</span>
+<span class="nc" id="L161">        Spinner s5 = sc5.getSpinner();</span>
+
+        // Ajout sur la grille
+<span class="nc" id="L164">        grid.add(s1, 0, 6);</span>
+<span class="nc" id="L165">        grid.add(s2, 1, 6);</span>
+<span class="nc" id="L166">        grid.add(s3, 2, 6);</span>
+<span class="nc" id="L167">        grid.add(s4, 3, 6);</span>
+<span class="nc" id="L168">        grid.add(s5, 4, 6);</span>
+
+        // Valeurs par défaut
+<span class="nc" id="L171">        this.character1 = s1.getValue().toString();</span>
+<span class="nc" id="L172">        this.character2 = s1.getValue().toString();</span>
+<span class="nc" id="L173">        this.character3 = s1.getValue().toString();</span>
+<span class="nc" id="L174">        this.character4 = s1.getValue().toString();</span>
+<span class="nc" id="L175">        this.character5 = s1.getValue().toString();</span>
+
+        // Ajout des listeners
+<span class="nc" id="L178">        s1.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L179">                this.character1 = s1.getValue().toString());</span>
+<span class="nc" id="L180">        s2.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L181">                this.character2 = s2.getValue().toString());</span>
+<span class="nc" id="L182">        s3.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L183">                this.character3 = s3.getValue().toString());</span>
+<span class="nc" id="L184">        s4.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L185">                this.character4 = s4.getValue().toString());</span>
+<span class="nc" id="L186">        s5.valueProperty().addListener((obs, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L187">                this.character5 = s5.getValue().toString());</span>
+
+        // Bouton jouer
+<span class="nc" id="L190">        Button buttonJouer = new Button(&quot;Jouer&quot;);</span>
+<span class="nc" id="L191">        buttonJouer.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent e) {
+<span class="nc" id="L194">                Class[] cl = new Class[App.characterNumber];</span>
+<span class="nc" id="L195">                List&lt;String&gt; listCharacters = getListCharacters();</span>
+
+<span class="nc bnc" id="L197" title="All 2 branches missed.">                for (int i = App.characterNumber - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L198">                    System.out.println(listCharacters.get(i));</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                    if (listCharacters.get(i).equals(&quot;lama&quot;)) {</span>
+<span class="nc" id="L200">                        cl[i] = LamaModel.class;</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                    } else if (listCharacters.get(i).equals(&quot;pony&quot;)) {</span>
+<span class="nc" id="L202">                        cl[i] = PoneyModel.class;</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                    } else if (listCharacters.get(i).equals(&quot;aquapony&quot;)) {</span>
+<span class="nc" id="L204">                        cl[i] = AquaPoneyModel.class;</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                    } else if (listCharacters.get(i).equals(&quot;ghostpony&quot;)) {</span>
+<span class="nc" id="L206">                        cl[i] = GhostPoneyModel.class;</span>
+                    } else {
+<span class="nc" id="L208">                        cl[i] = PoneyModel.class;</span>
+                    }
+                }
+
+<span class="nc" id="L212">                System.out.println(&quot;Nb IA:&quot; + getNbIa());</span>
+<span class="nc" id="L213">                System.out.println(&quot;GetMap:&quot; + getMap());</span>
+
+<span class="nc" id="L215">                Stage stage1 = new Stage();</span>
+<span class="nc" id="L216">                JfxView gameView = new JfxView(&quot;Poneymon 2.0 - Jeu&quot;, stage1);</span>
+
+<span class="nc" id="L218">                FieldModel fieldModel = new FieldModel(cl, getNbIa(),</span>
+<span class="nc" id="L219">                        getMap(), ModeEnum.LOCAL, null);</span>
+
+<span class="nc" id="L221">                FieldView fieldView =</span>
+                        new FieldView(fieldModel, 600,600);
+
+<span class="nc" id="L224">                Controler controler = Controler.getControler();</span>
+<span class="nc" id="L225">                fieldView.setControler(controler);</span>
+<span class="nc" id="L226">                controler.addUpdateView(gameView);</span>
+<span class="nc" id="L227">                controler.setModel(fieldModel);</span>
+<span class="nc" id="L228">                gameView.setView(fieldView);</span>
+
+<span class="nc" id="L230">                Stage stage2 = new Stage();</span>
+<span class="nc" id="L231">                JfxView scoreView = new JfxView(&quot;Poneymon 2.0 - Score&quot;, stage2);</span>
+<span class="nc" id="L232">                scoreView.setView(new ScoreView(fieldModel, 600, 600));</span>
+<span class="nc" id="L233">                controler.addView(scoreView);</span>
+
+<span class="nc" id="L235">                controler.startTimer();</span>
+
+<span class="nc" id="L237">                stage.close();</span>
+<span class="nc" id="L238">            }</span>
+        });
+<span class="nc" id="L240">        grid.add(buttonJouer, 2, 9);</span>
+
+        // Provisoire
+        //grid.setGridLinesVisible(true);
+
+        // Affichage fenêtre
+<span class="nc" id="L246">        Scene scene = new Scene(grid, 700, 300);</span>
+<span class="nc" id="L247">        stage.setScene(scene);</span>
+<span class="nc" id="L248">        stage.show();</span>
+<span class="nc" id="L249">    }</span>
+
+    /**
+     * Affichage des attributs pour test.
+     */
+    public void getAttributes() {
+        /*System.out.println(&quot;C1 : &quot; + this.character1 + &quot; C2 : &quot; + this.character2 + &quot; C3 : &quot;
+                + this.character3 + &quot; C4 : &quot; + this.character4 + &quot; C5 : &quot; + this.character5);
+        System.out.println(&quot;Nb IA : &quot; + this.nbIa);
+        System.out.println(&quot;Map : &quot; + this.map);*/
+<span class="nc" id="L259">    }</span>
+
+    /**
+     * Getter du nombre d'IA.
+     * @return nombre d'IA dans la partie
+     */
+    public int getNbIa() {
+<span class="nc" id="L266">        return this.nbIa;</span>
+    }
+
+    /**
+     * Getter de la liste des personnages.
+     * @return la liste des personnages
+     */
+    public List&lt;String&gt; getListCharacters() {
+<span class="nc" id="L274">        this.listCharacters.clear();</span>
+<span class="nc" id="L275">        this.listCharacters.add(character1);</span>
+<span class="nc" id="L276">        this.listCharacters.add(character2);</span>
+<span class="nc" id="L277">        this.listCharacters.add(character3);</span>
+<span class="nc" id="L278">        this.listCharacters.add(character4);</span>
+<span class="nc" id="L279">        this.listCharacters.add(character5);</span>
+<span class="nc" id="L280">        return this.listCharacters;</span>
+    }
+
+    /**
+     * Getter de la map.
+     * @return String du nom de la map
+     */
+    public String getMap() {
+<span class="nc" id="L288">        return this.map;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
